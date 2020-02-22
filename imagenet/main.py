@@ -190,10 +190,10 @@ def main_worker(gpu, ngpus_per_node, args):
     else:
         criterion = nn.CrossEntropyLoss()
 
-    model_info = m.GetModelInfo(args.arch)
-    float_model_file = os.path.join(model_info['model_dir'], model_info['float_Model'])
 
     if (args.INT8 != "no_INT8"):
+        model_info = m.GetModelInfo(args.arch)
+        float_model_file = os.path.join(model_info['model_dir'], model_info['float_Model'])
         quantized_model_state_dict_file = os.path.join(model_info['model_dir'], args.qscheme + "_reduceRange_" + str(args.reduce_range) + "_" + model_info['quantized_Model_State_Dict'])
         quantized_model_file = os.path.join(model_info['model_dir'], args.qscheme + "_" + model_info['quantized_Model'])
         scripted_quantized_model_file = os.path.join(model_info['model_dir'], args.qscheme + "_reduceRange_" + str(args.reduce_range) + "_" + model_info['scripted_Quantized_Model'])
