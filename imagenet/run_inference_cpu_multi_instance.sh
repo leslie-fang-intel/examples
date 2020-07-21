@@ -2,16 +2,13 @@
 
 ###############################################################################
 ### How to run?
-### 1) install pytorch internal
-### 2) install torchvision: for benchmarking ResNext101_32x4d, follow this steps:
-###    1) git clone -b v0.5.0 https://github.com/pytorch/vision.git
-###    2) replace original resnet.py with this fold's resnet.py
-###    3) python setup.py install
-### 3) conda install jemalloc
-### 4) export LD_PRELOAD= "/YOUR_CONDA_PATH/envs/YOUR_CONDA_ENV/lib/libjemalloc.so
-###    /opt/intel/compilers_and_libraries/linux/lib/intel64/libiomp5.so"
+### 1) install pytorch
+### 2) install torchvision
+### 3) install jemalloc from source code
+### 4) export LD_PRELOAD= "/YOUR_CONDA_PATH/envs/YOUR_CONDA_ENV/lib/libjemalloc.so"
 ### 5) Test cpu throughput(2 instance, 28 core/ins). Just run
-###    bash run_inference_cpu_multi_instance_bf16.sh resnet50/resnext101_32x4d
+###    bash run_inference_cpu_multi_instance.sh mkldnn
+### or bash run_inference_cpu_multi_instance.sh
 ###
 ###############################################################################
 
