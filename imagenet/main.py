@@ -18,6 +18,9 @@ import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import torchvision.models as models
 
+import intel_pytorch_extension as ipex
+import _torch_ipex as core
+
 model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
     and callable(models.__dict__[name]))
@@ -74,23 +77,46 @@ parser.add_argument('--multiprocessing-distributed', action='store_true',
                          'fastest way to use PyTorch for either single node or '
                          'multi node data parallel training')
 
+parser.add_argument('--ipex', action='store_true', default=False,
+                    help='use intel pytorch extension')
+parser.add_argument('--no-cuda', action='store_true', default=False,
+                    help='disable CUDA')
+parser.add_argument('--dnnl', action='store_true', default=False,
+                    help='enable Intel_PyTorch_Extension auto dnnl path')
+parser.add_argument('--int8', action='store_true', default=False,
+                    help='enable ipex int8 path')
+parser.add_argument('--calibration', action='store_true', default=False,
+                    help='doing calibration step')
+
+
 best_acc1 = 0
 
 
 def main():
     args = parser.parse_args()
+    args.cuda = not args.no_cuda and torch.cuda.is_available()
+    print(args)
+    if args.ipex:
+        import intel_pytorch_extension as ipex
+    if args.dnnl:
+        ipex.core.enable_auto_dnnl()
+    else:
+        ipex.core.disable_auto_dnnl()
+    if args.int8 and args.evaluate:
+        ipex.core.enable_mix_int8_fp32()
 
     if args.seed is not None:
         random.seed(args.seed)
         torch.manual_seed(args.seed)
-        cudnn.deterministic = True
+        if args.cuda:
+            cudnn.deterministic = True
         warnings.warn('You have chosen to seed training. '
                       'This will turn on the CUDNN deterministic setting, '
                       'which can slow down your training considerably! '
                       'You may see unexpected behavior when restarting '
                       'from checkpoints.')
 
-    if args.gpu is not None:
+    if args.gpu is not None and args.cuda:
         warnings.warn('You have chosen a specific GPU. This will completely '
                       'disable data parallelism.')
 
@@ -99,7 +125,7 @@ def main():
 
     args.distributed = args.world_size > 1 or args.multiprocessing_distributed
 
-    ngpus_per_node = torch.cuda.device_count()
+    ngpus_per_node = torch.cuda.device_count() if args.cuda else 0
     if args.multiprocessing_distributed:
         # Since we have ngpus_per_node processes per node, the total world_size
         # needs to be adjusted accordingly
@@ -142,7 +168,7 @@ def main_worker(gpu, ngpus_per_node, args):
         # For multiprocessing distributed, DistributedDataParallel constructor
         # should always set the single device scope, otherwise,
         # DistributedDataParallel will use all available devices.
-        if args.gpu is not None:
+        if args.gpu is not None and args.cuda:
             torch.cuda.set_device(args.gpu)
             model.cuda(args.gpu)
             # When using a single GPU per process and per
@@ -152,23 +178,37 @@ def main_worker(gpu, ngpus_per_node, args):
             args.workers = int((args.workers + ngpus_per_node - 1) / ngpus_per_node)
             model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu])
         else:
-            model.cuda()
+            if args.cuda:
+                model.cuda()
+                print("create DistributedDataParallel in GPU")
+            else:
+                print("create DistributedDataParallel in CPU")
             # DistributedDataParallel will divide and allocate batch_size to all
             # available GPUs if device_ids are not set
             model = torch.nn.parallel.DistributedDataParallel(model)
-    elif args.gpu is not None:
+    elif args.gpu is not None and args.cuda:
         torch.cuda.set_device(args.gpu)
         model = model.cuda(args.gpu)
     else:
         # DataParallel will divide and allocate batch_size to all available GPUs
         if args.arch.startswith('alexnet') or args.arch.startswith('vgg'):
             model.features = torch.nn.DataParallel(model.features)
-            model.cuda()
+            if args.cuda:
+                model.cuda()
         else:
-            model = torch.nn.DataParallel(model).cuda()
+            model = torch.nn.DataParallel(model)
+            if args.cuda():
+                model.cuda()
 
+    if args.ipex:
+        model = model.to(device = 'dpcpp:0')
     # define loss function (criterion) and optimizer
-    criterion = nn.CrossEntropyLoss().cuda(args.gpu)
+
+    criterion = nn.CrossEntropyLoss()
+    if args.cuda:
+        criterion = criterion.cuda(args.gpu)
+    elif args.ipex:
+        criterion = criterion.to(device = 'dpcpp:0')
 
     optimizer = torch.optim.SGD(model.parameters(), args.lr,
                                 momentum=args.momentum,
@@ -178,7 +218,7 @@ def main_worker(gpu, ngpus_per_node, args):
     if args.resume:
         if os.path.isfile(args.resume):
             print("=> loading checkpoint '{}'".format(args.resume))
-            if args.gpu is None:
+            if args.gpu is None and args.cuda:
                 checkpoint = torch.load(args.resume)
             else:
                 # Map model to be loaded to specified single gpu.
@@ -186,7 +226,7 @@ def main_worker(gpu, ngpus_per_node, args):
                 checkpoint = torch.load(args.resume, map_location=loc)
             args.start_epoch = checkpoint['epoch']
             best_acc1 = checkpoint['best_acc1']
-            if args.gpu is not None:
+            if args.gpu is not None and args.cuda:
                 # best_acc1 may be from a checkpoint from a different GPU
                 best_acc1 = best_acc1.to(args.gpu)
             model.load_state_dict(checkpoint['state_dict'])
@@ -196,7 +236,8 @@ def main_worker(gpu, ngpus_per_node, args):
         else:
             print("=> no checkpoint found at '{}'".format(args.resume))
 
-    cudnn.benchmark = True
+    if args.cuda:
+        cudnn.benchmark = True
 
     # Data loading code
     traindir = os.path.join(args.data, 'train')
@@ -233,6 +274,8 @@ def main_worker(gpu, ngpus_per_node, args):
         num_workers=args.workers, pin_memory=True)
 
     if args.evaluate:
+        if args.ipex:
+            print("using ipex model to do inference\n")
         validate(val_loader, model, criterion, args)
         return
 
@@ -322,34 +365,119 @@ def validate(val_loader, model, criterion, args):
     # switch to evaluate mode
     model.eval()
 
-    with torch.no_grad():
-        end = time.time()
-        for i, (images, target) in enumerate(val_loader):
-            if args.gpu is not None:
-                images = images.cuda(args.gpu, non_blocking=True)
-            if torch.cuda.is_available():
-                target = target.cuda(args.gpu, non_blocking=True)
+    if args.int8 and args.ipex:
+        if args.calibration:
+            print("runing int8 calibration step\n")
+            with torch.no_grad():
+                with ipex.int8_calibration("configure.txt"):
+                    end = time.time()
+                    for i, (images, target) in enumerate(val_loader):
+                        images = images.to(device = 'dpcpp:0')
+                        # compute output
+                        output = model(images)
+                        loss = criterion(output, target)
 
-            # compute output
-            output = model(images)
-            loss = criterion(output, target)
+                        # measure accuracy and record loss
+                        acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                        losses.update(loss.item(), images.size(0))
+                        top1.update(acc1[0], images.size(0))
+                        top5.update(acc5[0], images.size(0))
 
-            # measure accuracy and record loss
-            acc1, acc5 = accuracy(output, target, topk=(1, 5))
-            losses.update(loss.item(), images.size(0))
-            top1.update(acc1[0], images.size(0))
-            top5.update(acc5[0], images.size(0))
+                        # measure elapsed time
+                        batch_time.update(time.time() - end)
+                        end = time.time()
 
-            # measure elapsed time
-            batch_time.update(time.time() - end)
+                        if i % args.print_freq == 0:
+                            progress.display(i)
+                        if i == 10:
+                            break
+
+                        ipex.calibration_reset()
+
+                # TODO: this should also be done with the ProgressMeter
+                print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
+                      .format(top1=top1, top5=top5))
+        else:
+            print("runing int8 inference step\n")
+            with torch.no_grad():
+                with ipex.int8_validate("configure.txt"):
+                    end = time.time()
+                    for i, (images, target) in enumerate(val_loader):
+                        images = images.to(device = 'dpcpp:0')
+                        target = target.to(device = 'dpcpp:0')
+                        # compute output
+                        #print(images)
+                        output = model(images)
+                        #print("ccccccccccccccccccccc\n")
+                        #print(output)
+                        loss = criterion(output, target)
+
+                        # measure accuracy and record loss
+                        acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                        losses.update(loss.item(), images.size(0))
+                        top1.update(acc1[0], images.size(0))
+                        top5.update(acc5[0], images.size(0))
+
+                        # measure elapsed time
+                        batch_time.update(time.time() - end)
+                        end = time.time()
+
+                        if i % args.print_freq == 0:
+                            progress.display(i)
+                        #if i == 1:
+                        #    break
+
+                batch_size = val_loader.batch_size
+                latency = batch_time.avg / batch_size * 1000
+                perf = batch_size/batch_time.avg
+                print('inference latency %3.0f ms'%latency)
+                print('inference performance %3.0f fps'%perf)
+
+                # TODO: this should also be done with the ProgressMeter
+                print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
+                      .format(top1=top1, top5=top5))
+    else:
+        with torch.no_grad():
             end = time.time()
+            for i, (images, target) in enumerate(val_loader):
+                if args.gpu is not None and args.cuda:
+                    images = images.cuda(args.gpu, non_blocking=True)
+                if args.cuda:
+                    target = target.cuda(args.gpu, non_blocking=True)
 
-            if i % args.print_freq == 0:
-                progress.display(i)
+                if args.ipex:
+                    images = images.to(device = 'dpcpp:0')
+                    target = target.to(device = 'dpcpp:0')
 
-        # TODO: this should also be done with the ProgressMeter
-        print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
-              .format(top1=top1, top5=top5))
+                # compute output
+                output = model(images)
+                #print(output)
+                loss = criterion(output, target)
+
+                # measure accuracy and record loss
+                acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                losses.update(loss.item(), images.size(0))
+                top1.update(acc1[0], images.size(0))
+                top5.update(acc5[0], images.size(0))
+
+                # measure elapsed time
+                batch_time.update(time.time() - end)
+                end = time.time()
+
+                if i % args.print_freq == 0:
+                    progress.display(i)
+                #if i == 1:
+                #    break
+
+            batch_size = val_loader.batch_size
+            latency = batch_time.avg / batch_size * 1000
+            perf = batch_size/batch_time.avg
+            print('inference latency %3.0f ms'%latency)
+            print('inference performance %3.0f fps'%perf)
+
+            # TODO: this should also be done with the ProgressMeter
+            print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
+                  .format(top1=top1, top5=top5))
 
     return top1.avg
 
