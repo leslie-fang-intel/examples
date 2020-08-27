@@ -87,7 +87,8 @@ parser.add_argument('--int8', action='store_true', default=False,
                     help='enable ipex int8 path')
 parser.add_argument('--calibration', action='store_true', default=False,
                     help='doing calibration step')
-
+parser.add_argument('--configure-dir', default='configure.json', type=str, metavar='PATH',
+                    help = 'path to int8 configures, default file name is configure.json')
 
 best_acc1 = 0
 
@@ -103,7 +104,11 @@ def main():
     else:
         ipex.core.disable_auto_dnnl()
     if args.int8 and args.evaluate:
-        ipex.core.enable_mix_int8_fp32()
+        if args.calibration:
+            ipex.enable_auto_mix_precision(torch.uint8)
+        else:
+            ipex.enable_auto_mix_precision(torch.uint8, configure_file=args.configure_dir)
+
 
     if args.seed is not None:
         random.seed(args.seed)
@@ -365,78 +370,43 @@ def validate(val_loader, model, criterion, args):
     # switch to evaluate mode
     model.eval()
 
-    if args.int8 and args.ipex:
-        if args.calibration:
-            print("runing int8 calibration step\n")
-            with torch.no_grad():
-                with ipex.int8_calibration("configure.txt"):
+    if args.ipex and args.int8 and args.calibration:
+        print("runing int8 calibration step\n")
+        with torch.no_grad():
+            with ipex.int8_calibration(args.configure_dir):
+                end = time.time()
+                for i, (images, target) in enumerate(val_loader):
+                    images = images.to(device = 'dpcpp:0')
+                    # compute output
+                    output = model(images)
+                    loss = criterion(output, target)
+
+                    # measure accuracy and record loss
+                    acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                    losses.update(loss.item(), images.size(0))
+                    top1.update(acc1[0], images.size(0))
+                    top5.update(acc5[0], images.size(0))
+
+                    # measure elapsed time
+                    batch_time.update(time.time() - end)
                     end = time.time()
-                    for i, (images, target) in enumerate(val_loader):
-                        images = images.to(device = 'dpcpp:0')
-                        # compute output
-                        output = model(images)
-                        loss = criterion(output, target)
 
-                        # measure accuracy and record loss
-                        acc1, acc5 = accuracy(output, target, topk=(1, 5))
-                        losses.update(loss.item(), images.size(0))
-                        top1.update(acc1[0], images.size(0))
-                        top5.update(acc5[0], images.size(0))
+                    if i % args.print_freq == 0:
+                        progress.display(i)
+                    if i == 10:
+                        break
 
-                        # measure elapsed time
-                        batch_time.update(time.time() - end)
-                        end = time.time()
+                    ipex.calibration_reset()
 
-                        if i % args.print_freq == 0:
-                            progress.display(i)
-                        if i == 10:
-                            break
-
-                        ipex.calibration_reset()
-
-                # TODO: this should also be done with the ProgressMeter
-                print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
-                      .format(top1=top1, top5=top5))
-        else:
-            print("runing int8 inference step\n")
-            with torch.no_grad():
-                with ipex.int8_validate("configure.txt"):
-                    end = time.time()
-                    for i, (images, target) in enumerate(val_loader):
-                        images = images.to(device = 'dpcpp:0')
-                        target = target.to(device = 'dpcpp:0')
-                        # compute output
-                        #print(images)
-                        output = model(images)
-                        #print("ccccccccccccccccccccc\n")
-                        #print(output)
-                        loss = criterion(output, target)
-
-                        # measure accuracy and record loss
-                        acc1, acc5 = accuracy(output, target, topk=(1, 5))
-                        losses.update(loss.item(), images.size(0))
-                        top1.update(acc1[0], images.size(0))
-                        top5.update(acc5[0], images.size(0))
-
-                        # measure elapsed time
-                        batch_time.update(time.time() - end)
-                        end = time.time()
-
-                        if i % args.print_freq == 0:
-                            progress.display(i)
-                        #if i == 1:
-                        #    break
-
-                batch_size = val_loader.batch_size
-                latency = batch_time.avg / batch_size * 1000
-                perf = batch_size/batch_time.avg
-                print('inference latency %3.0f ms'%latency)
-                print('inference performance %3.0f fps'%perf)
-
-                # TODO: this should also be done with the ProgressMeter
-                print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
-                      .format(top1=top1, top5=top5))
+            # TODO: this should also be done with the ProgressMeter
+            print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
+                  .format(top1=top1, top5=top5))
     else:
+        if args.ipex:
+            if args.int8:
+                print("running int8 evalation step\n")
+            else:
+                print("running fp32 evalation step\n")
         with torch.no_grad():
             end = time.time()
             for i, (images, target) in enumerate(val_loader):
