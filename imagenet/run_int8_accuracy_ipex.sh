@@ -1,10 +1,14 @@
 ##############################################################################
-#### 1) calibration step:
+#### 1) int8 calibration step(non fusion path using ipex):
 ####    bash run_int8_accuracy_ipex.sh resnet50 DATA_PATH dnnl int8 calibration
-#### 2) inference step:
+#### 2) int8 inference step(none fusion path using ipex):
 ####    bash run_int8_accuracy_ipex.sh resnet50 DATA_PATH dnnl int8
+#### 3) fp32 inference step(non fusion path using ipex):
+####    bash run_int8_accuracy_ipex.sh resnet50 DATA_PATH dnnl
 ###############################################################################
 export DNNL_PRIMITIVE_CACHE_CAPACITY=1024
+
+BATCH_SIZE=128
 
 ARGS=""
 if [[ "$1" == "resnet50" ]]
@@ -33,6 +37,7 @@ fi
 
 if [[ "$5" == "calibration" ]]
 then
+    BATCH_SIZE=32
     ARGS="$ARGS --calibration"
     echo "### running int8 calibration"
 fi
@@ -44,7 +49,6 @@ TOTAL_CORES=`expr $CORES \* $SOCKETS`
 
 KMP_SETTING="KMP_AFFINITY=granularity=fine,compact,1,0"
 
-BATCH_SIZE=128
 
 export OMP_NUM_THREADS=$TOTAL_CORES
 export $KMP_SETTING
@@ -54,7 +58,7 @@ echo -e "### using $KMP_SETTING\n\n"
 sleep 3
 
 if [ "$1" == "resnet50" ]; then
-  python -u main.py -e -a $ARGS --ipex --pretrained -j 0 -b $BATCH_SIZE
+  python -u main.py -e -a $ARGS --ipex --pretrained -j 0 -b $BATCH_SIZE --configure-dir resnet50_configure.json
 else
-  python -u main.py -e -a $ARGS --ipex --pretrained -j $TOTAL_CORES -b $BATCH_SIZE --checkpoint-dir checkpoints/resnext101_32x4d/checkpoint.pth.tar
+  python -u main.py -e -a $ARGS --ipex --pretrained -j 0 -b $BATCH_SIZE --checkpoint-dir checkpoints/resnext101_32x4d/checkpoint.pth.tar --configure-dir resnext101_configure.json
 fi
