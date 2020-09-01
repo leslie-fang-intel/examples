@@ -3,17 +3,17 @@
 ###############################################################################
 ### How to run?
 ### 1) int8 inference
-###    bash run_int8_multi_instance_ipex.sh resnet50 DATA_PATH dnnl int8
+###    bash run_int8_multi_instance_ipex.sh resnet50 DATA_PATH dnnl int8 jit resnet50_configure_jit.json
 ### 2) fp32 infenence
-###    bash run_int8_multi_instance_ipex.sh resnet50 DATA_PATH dnnl
+###    bash run_int8_multi_instance_ipex.sh resnet50 DATA_PATH dnnl fp32 jit
 ###
 ###############################################################################
 
 export DNNL_PRIMITIVE_CACHE_CAPACITY=1024
 
+CONFIG_FILE=""
 ARGS=""
-if [[ "$1" == "resnet50" ]]
-then
+if [ "$1" == "resnet50" ]; then
     ARGS="$ARGS resnet50"
     echo "### running resnet50 model"
 else
@@ -24,23 +24,25 @@ fi
 ARGS="$ARGS $2"
 echo "### dataset path: $2"
 
-if [[ "$3" == "dnnl" ]]
-then
+if [ "$3" == "dnnl" ]; then
     ARGS="$ARGS --dnnl"
     echo "### running auto_dnnl mode"
 fi
 
-if [[ "$4" == "int8" ]]
-then
+if [ "$4" == "int8" ]; then
     ARGS="$ARGS --int8"
+    CONFIG_FILE="$CONFIG_FILE --configure-dir $6"
     echo "### running int8 datatype"
+else
+    echo "### running fp32 datatype"
 fi
 
-#if [[ "$5" == "jit" ]]
-#then
-#    ARGS="$ARGS --jit"
-#    echo "### running jit mode"
-#fi
+if [ "$5" == "jit" ]; then
+    ARGS="$ARGS --jit"
+    echo "### running jit fusion path"
+else
+    echo "### running jit fusion path"
+fi
 
 CORES=`lscpu | grep Core | awk '{print $4}'`
 SOCKETS=`lscpu | grep Socket | awk '{print $2}'`
@@ -71,7 +73,7 @@ for i in $(seq 1 $LAST_INSTANCE); do
 
     echo "### running on instance $i, numa node $numa_node_i, core list {$start_core_i, $end_core_i}..."
     numactl --physcpubind=$start_core_i-$end_core_i --membind=$numa_node_i python -u main.py -e -a $ARGS \
-        --ipex --dummy -j 0 -b $BATCH_SIZE --configure-dir resnet50_configure.json 2>&1 | tee $LOG_i &
+        --ipex --dummy -j 0 -b $BATCH_SIZE $CONFIG_FILE 2>&1 | tee $LOG_i &
 done
 
 numa_node_0=0
@@ -81,7 +83,7 @@ LOG_0=inference_cpu_bs${BATCH_SIZE}_ins0.txt
 
 echo "### running on instance 0, numa node $numa_node_0, core list {$start_core_0, $end_core_0}...\n\n"
 numactl --physcpubind=$start_core_0-$end_core_0 --membind=$numa_node_0 python -u main.py -e -a $ARGS \
-    --ipex --dummy -j 0 -b $BATCH_SIZE --configure-dir resnet50_configure.json 2>&1 | tee $LOG_0
+    --ipex --dummy -j 0 -b $BATCH_SIZE $CONFIG_FILE 2>&1 | tee $LOG_0
 
 sleep 10
 echo -e "\n\n Sum sentences/s together:"
