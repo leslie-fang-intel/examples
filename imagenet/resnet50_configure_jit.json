@@ -1,0 +1,1047 @@
+[
+    {
+        "id": 0,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            48.29545211791992
+        ],
+        "outputs_scale": [
+            19.62987518310547
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 1,
+        "name": "MaxPooling",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            19.62987518310547
+        ],
+        "outputs_scale": [
+            19.62987518310547
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 2,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            19.62987518310547
+        ],
+        "outputs_scale": [
+            60.92735290527344
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 3,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            60.92735290527344
+        ],
+        "outputs_scale": [
+            54.335365295410156
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 4,
+        "name": "Convolution",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            19.62987518310547
+        ],
+        "outputs_scale": [
+            21.3393497467041
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 5,
+        "name": "Convolution_Sum_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            54.335365295410156
+        ],
+        "outputs_scale": [
+            32.07040786743164
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 6,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            32.07040786743164
+        ],
+        "outputs_scale": [
+            56.62151336669922
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 7,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            56.62151336669922
+        ],
+        "outputs_scale": [
+            44.779170989990234
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 8,
+        "name": "Convolution_Sum_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            44.779170989990234
+        ],
+        "outputs_scale": [
+            30.2507381439209
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 9,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            30.2507381439209
+        ],
+        "outputs_scale": [
+            60.484073638916016
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 10,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            60.484073638916016
+        ],
+        "outputs_scale": [
+            41.569129943847656
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 11,
+        "name": "Convolution_Sum_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            41.569129943847656
+        ],
+        "outputs_scale": [
+            28.887317657470703
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 12,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            28.887317657470703
+        ],
+        "outputs_scale": [
+            33.33131790161133
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 13,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            33.33131790161133
+        ],
+        "outputs_scale": [
+            41.870853424072266
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 14,
+        "name": "Convolution",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            28.887317657470703
+        ],
+        "outputs_scale": [
+            39.78800582885742
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 15,
+        "name": "Convolution_Sum_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            41.870853424072266
+        ],
+        "outputs_scale": [
+            25.1519718170166
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 16,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            25.1519718170166
+        ],
+        "outputs_scale": [
+            87.49690246582031
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 17,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            87.49690246582031
+        ],
+        "outputs_scale": [
+            58.32136917114258
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 18,
+        "name": "Convolution_Sum_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            58.32136917114258
+        ],
+        "outputs_scale": [
+            25.196744918823242
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 19,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            25.196744918823242
+        ],
+        "outputs_scale": [
+            61.030826568603516
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 20,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            61.030826568603516
+        ],
+        "outputs_scale": [
+            71.06159210205078
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 21,
+        "name": "Convolution_Sum_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            71.06159210205078
+        ],
+        "outputs_scale": [
+            25.23723602294922
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 22,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            25.23723602294922
+        ],
+        "outputs_scale": [
+            52.60574722290039
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 23,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            52.60574722290039
+        ],
+        "outputs_scale": [
+            40.08079147338867
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 24,
+        "name": "Convolution_Sum_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            40.08079147338867
+        ],
+        "outputs_scale": [
+            28.055103302001953
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 25,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            28.055103302001953
+        ],
+        "outputs_scale": [
+            32.008419036865234
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 26,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            32.008419036865234
+        ],
+        "outputs_scale": [
+            60.704742431640625
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 27,
+        "name": "Convolution",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            28.055103302001953
+        ],
+        "outputs_scale": [
+            66.8135986328125
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 28,
+        "name": "Convolution_Sum_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            60.704742431640625
+        ],
+        "outputs_scale": [
+            32.81126022338867
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 29,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            32.81126022338867
+        ],
+        "outputs_scale": [
+            41.81407928466797
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 30,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            41.81407928466797
+        ],
+        "outputs_scale": [
+            64.20614624023438
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 31,
+        "name": "Convolution_Sum_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            64.20614624023438
+        ],
+        "outputs_scale": [
+            27.180368423461914
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 32,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            27.180368423461914
+        ],
+        "outputs_scale": [
+            68.98503875732422
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 33,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            68.98503875732422
+        ],
+        "outputs_scale": [
+            92.63417053222656
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 34,
+        "name": "Convolution_Sum_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            92.63417053222656
+        ],
+        "outputs_scale": [
+            29.384313583374023
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 35,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            29.384313583374023
+        ],
+        "outputs_scale": [
+            51.375423431396484
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 36,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            51.375423431396484
+        ],
+        "outputs_scale": [
+            79.78258514404297
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 37,
+        "name": "Convolution_Sum_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            79.78258514404297
+        ],
+        "outputs_scale": [
+            25.324932098388672
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 38,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            25.324932098388672
+        ],
+        "outputs_scale": [
+            42.58588409423828
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 39,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            42.58588409423828
+        ],
+        "outputs_scale": [
+            67.09175109863281
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 40,
+        "name": "Convolution_Sum_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            67.09175109863281
+        ],
+        "outputs_scale": [
+            24.746156692504883
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 41,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            24.746156692504883
+        ],
+        "outputs_scale": [
+            44.723628997802734
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 42,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            44.723628997802734
+        ],
+        "outputs_scale": [
+            40.990108489990234
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 43,
+        "name": "Convolution_Sum_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            40.990108489990234
+        ],
+        "outputs_scale": [
+            30.551530838012695
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 44,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            30.551530838012695
+        ],
+        "outputs_scale": [
+            47.88484573364258
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 45,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            47.88484573364258
+        ],
+        "outputs_scale": [
+            45.04399871826172
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 46,
+        "name": "Convolution",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            30.551530838012695
+        ],
+        "outputs_scale": [
+            13.99937915802002
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 47,
+        "name": "Convolution_Sum_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            45.04399871826172
+        ],
+        "outputs_scale": [
+            10.396422386169434
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 48,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            10.396422386169434
+        ],
+        "outputs_scale": [
+            52.65647888183594
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 49,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            52.65647888183594
+        ],
+        "outputs_scale": [
+            64.40234375
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 50,
+        "name": "Convolution_Sum_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            64.40234375
+        ],
+        "outputs_scale": [
+            8.616843223571777
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 51,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            8.616843223571777
+        ],
+        "outputs_scale": [
+            42.598384857177734
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 52,
+        "name": "Convolution_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            42.598384857177734
+        ],
+        "outputs_scale": [
+            63.523685455322266
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 53,
+        "name": "Convolution_Sum_Relu",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            63.523685455322266
+        ],
+        "outputs_scale": [
+            5.212666034698486
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    },
+    {
+        "id": 54,
+        "name": "Linear",
+        "algorithm": "min_max",
+        "weight_granularity": "per_tensor",
+        "inputs_scale": [
+            17.144920349121094
+        ],
+        "outputs_scale": [
+            4.37150239944458
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
+        "quantized": true
+    }
+]

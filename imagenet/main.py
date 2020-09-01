@@ -85,6 +85,8 @@ parser.add_argument('--dnnl', action='store_true', default=False,
                     help='enable Intel_PyTorch_Extension auto dnnl path')
 parser.add_argument('--int8', action='store_true', default=False,
                     help='enable ipex int8 path')
+parser.add_argument('--jit', action='store_true', default=False,
+                    help='enable ipex jit fusionpath')
 parser.add_argument('--calibration', action='store_true', default=False,
                     help='doing calibration step')
 parser.add_argument('--configure-dir', default='configure.json', type=str, metavar='PATH',
@@ -107,12 +109,6 @@ def main():
         ipex.core.enable_auto_dnnl()
     else:
         ipex.core.disable_auto_dnnl()
-    if args.int8 and args.evaluate:
-        if args.calibration:
-            ipex.enable_auto_mix_precision(torch.uint8)
-        else:
-            ipex.enable_auto_mix_precision(torch.uint8, configure_file=args.configure_dir)
-
 
     if args.seed is not None:
         random.seed(args.seed)
@@ -285,7 +281,19 @@ def main_worker(gpu, ngpus_per_node, args):
     if args.evaluate:
         if args.ipex:
             print("using ipex model to do inference\n")
-        validate(val_loader, model, criterion, args)
+        if args.jit:
+            print("running jit fusion path\n")
+            script_model = torch.jit.script(model)
+        if args.int8:
+            if args.calibration:
+                ipex.enable_auto_mix_precision(torch.uint8)
+            else:
+                ipex.enable_auto_mix_precision(torch.uint8, configure_file=args.configure_dir)
+
+        if args.jit:
+            validate(val_loader, script_model, criterion, args)
+        else:
+            validate(val_loader, model, criterion, args)
         return
 
     for epoch in range(args.start_epoch, args.epochs):
@@ -487,7 +495,7 @@ def validate(val_loader, model, criterion, args):
 
                     if i % args.print_freq == 0:
                         progress.display(i)
-                    #if i == 1:
+                    #if i == 2:
                     #    break
 
                 batch_size = val_loader.batch_size
