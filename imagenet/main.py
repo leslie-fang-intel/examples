@@ -89,6 +89,10 @@ parser.add_argument('--calibration', action='store_true', default=False,
                     help='doing calibration step')
 parser.add_argument('--configure-dir', default='configure.json', type=str, metavar='PATH',
                     help = 'path to int8 configures, default file name is configure.json')
+parser.add_argument("--dummy", action='store_true',
+                    help="using  dummu data to test the performance of inference")
+parser.add_argument('-w', '--warmup-iterations', default=30, type=int, metavar='N',
+                    help='number of warmup iterati ons to run')
 
 best_acc1 = 0
 
@@ -407,47 +411,94 @@ def validate(val_loader, model, criterion, args):
                 print("running int8 evalation step\n")
             else:
                 print("running fp32 evalation step\n")
-        with torch.no_grad():
-            end = time.time()
-            for i, (images, target) in enumerate(val_loader):
-                if args.gpu is not None and args.cuda:
-                    images = images.cuda(args.gpu, non_blocking=True)
-                if args.cuda:
-                    target = target.cuda(args.gpu, non_blocking=True)
+        if args.dummy:
+            images = torch.randn(args.batch_size, 3, 224, 224)
+            target = torch.arange(1, args.batch_size + 1).long()
+            if args.gpu is not None and args.cuda:
+                images = images.cuda(args.gpu, non_blocking=True)
+            if args.cuda:
+                arget = target.cuda(args.gpu, non_blocking=True)
 
-                if args.ipex:
-                    images = images.to(device = 'dpcpp:0')
-                    target = target.to(device = 'dpcpp:0')
+            if args.ipex:
+                images = images.to(device = 'dpcpp:0')
+                target = target.to(device = 'dpcpp:0')
 
-                # compute output
-                output = model(images)
-                #print(output)
-                loss = criterion(output, target)
+            number_iter = len(val_loader)
+            with torch.no_grad():
+                for i in range(number_iter):
+                    if i >= args.warmup_iterations:
+                        end = time.time()
+                    # compute output
+                    output = model(images)
+                    if i >= args.warmup_iterations:
+                        batch_time.update(time.time() - end)
 
-                # measure accuracy and record loss
-                acc1, acc5 = accuracy(output, target, topk=(1, 5))
-                losses.update(loss.item(), images.size(0))
-                top1.update(acc1[0], images.size(0))
-                top5.update(acc5[0], images.size(0))
+                    #print(output)
+                    loss = criterion(output, target)
 
-                # measure elapsed time
-                batch_time.update(time.time() - end)
+                    # measure accuracy and record loss
+                    acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                    losses.update(loss.item(), images.size(0))
+                    top1.update(acc1[0], images.size(0))
+                    top5.update(acc5[0], images.size(0))
+
+
+                    if i % args.print_freq == 0:
+                        progress.display(i)
+                    #if i == 1:
+                    #    break
+
+                batch_size = val_loader.batch_size
+                latency = batch_time.avg / batch_size * 1000
+                perf = batch_size / batch_time.avg
+                print('inference latency %3.0f ms'%latency)
+                print('inference performance %3.0f fps'%perf)
+
+                # TODO: this should also be done with the ProgressMeter
+                print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
+                      .format(top1=top1, top5=top5))
+        else:
+            with torch.no_grad():
                 end = time.time()
+                for i, (images, target) in enumerate(val_loader):
+                    if args.gpu is not None and args.cuda:
+                        images = images.cuda(args.gpu, non_blocking=True)
+                    if args.cuda:
+                        target = target.cuda(args.gpu, non_blocking=True)
 
-                if i % args.print_freq == 0:
-                    progress.display(i)
-                #if i == 1:
-                #    break
+                    if args.ipex:
+                        images = images.to(device = 'dpcpp:0')
+                        target = target.to(device = 'dpcpp:0')
 
-            batch_size = val_loader.batch_size
-            latency = batch_time.avg / batch_size * 1000
-            perf = batch_size/batch_time.avg
-            print('inference latency %3.0f ms'%latency)
-            print('inference performance %3.0f fps'%perf)
+                    # compute output
+                    output = model(images)
+                    #print(output)
+                    loss = criterion(output, target)
 
-            # TODO: this should also be done with the ProgressMeter
-            print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
-                  .format(top1=top1, top5=top5))
+                    # measure accuracy and record loss
+                    acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                    losses.update(loss.item(), images.size(0))
+                    top1.update(acc1[0], images.size(0))
+                    top5.update(acc5[0], images.size(0))
+
+                    # measure elapsed time
+                    batch_time.update(time.time() - end)
+                    end = time.time()
+
+                    if i % args.print_freq == 0:
+                        progress.display(i)
+                    #if i == 1:
+                    #    break
+
+                batch_size = val_loader.batch_size
+                latency = batch_time.avg / batch_size * 1000
+                perf = batch_size / batch_time.avg
+                print('inference latency %3.0f ms'%latency)
+                print('inference performance %3.0f fps'%perf)
+
+                # TODO: this should also be done with the ProgressMeter
+                print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
+                      .format(top1=top1, top5=top5))
 
     return top1.avg
 
