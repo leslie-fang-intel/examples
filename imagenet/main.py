@@ -284,11 +284,6 @@ def main_worker(gpu, ngpus_per_node, args):
         if args.jit:
             print("running jit fusion path\n")
             script_model = torch.jit.script(model)
-        if args.int8:
-            if args.calibration:
-                ipex.enable_auto_mix_precision(torch.uint8)
-            else:
-                ipex.enable_auto_mix_precision(torch.uint8, configure_file=args.configure_dir)
 
         if args.jit:
             validate(val_loader, script_model, criterion, args)
@@ -384,10 +379,11 @@ def validate(val_loader, model, criterion, args):
 
     if args.ipex and args.int8 and args.calibration:
         print("runing int8 calibration step\n")
+        conf = ipex.AmpConf(torch.int8)
         with torch.no_grad():
-            with ipex.int8_calibration(args.configure_dir):
-                end = time.time()
-                for i, (images, target) in enumerate(val_loader):
+            end = time.time()
+            for i, (images, target) in enumerate(val_loader):
+                with ipex.enable_auto_mix_precision(conf, running_mode="calibration"):
                     images = images.to(device = 'dpcpp:0')
                     # compute output
                     output = model(images)
@@ -408,16 +404,17 @@ def validate(val_loader, model, criterion, args):
                     if i == 10:
                         break
 
-                    ipex.calibration_reset()
-
+            conf.save(args.configure_dir)
             # TODO: this should also be done with the ProgressMeter
             print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
                   .format(top1=top1, top5=top5))
     else:
         if args.ipex:
             if args.int8:
+                conf = ipex.AmpConf(torch.int8, args.configure_dir)
                 print("running int8 evalation step\n")
             else:
+                conf = ipex.AmpConf(None)
                 print("running fp32 evalation step\n")
         if args.dummy:
             images = torch.randn(args.batch_size, 3, 224, 224)
@@ -427,86 +424,114 @@ def validate(val_loader, model, criterion, args):
             if args.cuda:
                 arget = target.cuda(args.gpu, non_blocking=True)
 
+            number_iter = len(val_loader)
             if args.ipex:
                 images = images.to(device = 'dpcpp:0')
                 target = target.to(device = 'dpcpp:0')
+                with torch.no_grad():
+                    for i in range(number_iter):
+                        with ipex.enable_auto_mix_precision(conf, running_mode="inference"):
+                            if i >= args.warmup_iterations:
+                                end = time.time()
+                            # compute output
+                            output = model(images)
+                            if i >= args.warmup_iterations:
+                                batch_time.update(time.time() - end)
 
-            number_iter = len(val_loader)
-            with torch.no_grad():
-                for i in range(number_iter):
-                    if i >= args.warmup_iterations:
-                        end = time.time()
-                    # compute output
-                    output = model(images)
-                    if i >= args.warmup_iterations:
-                        batch_time.update(time.time() - end)
+                            #print(output)
+                            loss = criterion(output, target)
 
-                    #print(output)
-                    loss = criterion(output, target)
-
-                    # measure accuracy and record loss
-                    acc1, acc5 = accuracy(output, target, topk=(1, 5))
-                    losses.update(loss.item(), images.size(0))
-                    top1.update(acc1[0], images.size(0))
-                    top5.update(acc5[0], images.size(0))
+                            # measure accuracy and record loss
+                            acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                            losses.update(loss.item(), images.size(0))
+                            top1.update(acc1[0], images.size(0))
+                            top5.update(acc5[0], images.size(0))
 
 
-                    if i % args.print_freq == 0:
-                        progress.display(i)
-                    #if i == 1:
-                    #    break
+                            if i % args.print_freq == 0:
+                                progress.display(i)
+            else:
+                with torch.no_grad():
+                    for i in range(number_iter):
+                        if i >= args.warmup_iterations:
+                            end = time.time()
+                        # compute output
+                        output = model(images)
+                        if i >= args.warmup_iterations:
+                            batch_time.update(time.time() - end)
 
-                batch_size = val_loader.batch_size
-                latency = batch_time.avg / batch_size * 1000
-                perf = batch_size / batch_time.avg
-                print('inference latency %3.0f ms'%latency)
-                print('inference performance %3.0f fps'%perf)
+                        #print(output)
+                        loss = criterion(output, target)
 
-                # TODO: this should also be done with the ProgressMeter
-                print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
-                      .format(top1=top1, top5=top5))
+                        # measure accuracy and record loss
+                        acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                        losses.update(loss.item(), images.size(0))
+                        top1.update(acc1[0], images.size(0))
+                        top5.update(acc5[0], images.size(0))
+
+                        if i % args.print_freq == 0:
+                            progress.display(i)
         else:
-            with torch.no_grad():
-                end = time.time()
-                for i, (images, target) in enumerate(val_loader):
-                    if args.gpu is not None and args.cuda:
-                        images = images.cuda(args.gpu, non_blocking=True)
-                    if args.cuda:
-                        target = target.cuda(args.gpu, non_blocking=True)
-
-                    if args.ipex:
-                        images = images.to(device = 'dpcpp:0')
-                        target = target.to(device = 'dpcpp:0')
-
-                    # compute output
-                    output = model(images)
-                    #print(output)
-                    loss = criterion(output, target)
-
-                    # measure accuracy and record loss
-                    acc1, acc5 = accuracy(output, target, topk=(1, 5))
-                    losses.update(loss.item(), images.size(0))
-                    top1.update(acc1[0], images.size(0))
-                    top5.update(acc5[0], images.size(0))
-
-                    # measure elapsed time
-                    batch_time.update(time.time() - end)
+            if args.ipex:
+                with torch.no_grad():
                     end = time.time()
+                    for i, (images, target) in enumerate(val_loader):
+                        with ipex.enable_auto_mix_precision(conf, running_mode="inference"):
+                            images = images.to(device = 'dpcpp:0')
+                            target = target.to(device = 'dpcpp:0')
+                            # compute output
+                            output = model(images)
+                            #print(output)
+                            loss = criterion(output, target)
 
-                    if i % args.print_freq == 0:
-                        progress.display(i)
-                    #if i == 2:
-                    #    break
+                            # measure accuracy and record loss
+                            acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                            losses.update(loss.item(), images.size(0))
+                            top1.update(acc1[0], images.size(0))
+                            top5.update(acc5[0], images.size(0))
 
-                batch_size = val_loader.batch_size
-                latency = batch_time.avg / batch_size * 1000
-                perf = batch_size / batch_time.avg
-                print('inference latency %3.0f ms'%latency)
-                print('inference performance %3.0f fps'%perf)
+                            # measure elapsed time
+                            batch_time.update(time.time() - end)
+                            end = time.time()
 
-                # TODO: this should also be done with the ProgressMeter
-                print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
-                      .format(top1=top1, top5=top5))
+                            if i % args.print_freq == 0:
+                                progress.display(i)
+            else:
+                with torch.no_grad():
+                    end = time.time()
+                    for i, (images, target) in enumerate(val_loader):
+                        if args.gpu is not None and args.cuda:
+                            images = images.cuda(args.gpu, non_blocking=True)
+                        if args.cuda:
+                            target = target.cuda(args.gpu, non_blocking=True)
+
+                        # compute output
+                        output = model(images)
+                        #print(output)
+                        loss = criterion(output, target)
+
+                        # measure accuracy and record loss
+                        acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                        losses.update(loss.item(), images.size(0))
+                        top1.update(acc1[0], images.size(0))
+                        top5.update(acc5[0], images.size(0))
+
+                        # measure elapsed time
+                        batch_time.update(time.time() - end)
+                        end = time.time()
+
+                        if i % args.print_freq == 0:
+                            progress.display(i)
+
+        batch_size = val_loader.batch_size
+        latency = batch_time.avg / batch_size * 1000
+        perf = batch_size / batch_time.avg
+        print('inference latency %3.0f ms'%latency)
+        print('inference performance %3.0f fps'%perf)
+
+        # TODO: this should also be done with the ProgressMeter
+        print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
+              .format(top1=top1, top5=top5))
 
     return top1.avg
 
