@@ -4,10 +4,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 48.29545211791992,
-        "output_scale": 4.3651123046875,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            48.29545211791992
+        ],
+        "outputs_scale": [
+            4.3651123046875
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -15,10 +23,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 4.3651123046875,
-        "output_scale": 18.37832260131836,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            4.3651123046875
+        ],
+        "outputs_scale": [
+            18.37832260131836
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -26,10 +42,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 18.37832260131836,
-        "output_scale": 18.37832260131836,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            18.37832260131836
+        ],
+        "outputs_scale": [
+            18.37832260131836
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -37,10 +61,18 @@
         "name": "MaxPooling",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 19.62986946105957,
-        "output_scale": 19.62986946105957,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            19.62986946105957
+        ],
+        "outputs_scale": [
+            19.62986946105957
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -48,10 +80,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 19.62986946105957,
-        "output_scale": 24.131916046142578,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            19.62986946105957
+        ],
+        "outputs_scale": [
+            24.131916046142578
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -59,10 +99,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 24.131916046142578,
-        "output_scale": 25.24837875366211,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            24.131916046142578
+        ],
+        "outputs_scale": [
+            25.24837875366211
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -70,10 +118,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 25.24837875366211,
-        "output_scale": 25.24837875366211,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            25.24837875366211
+        ],
+        "outputs_scale": [
+            25.24837875366211
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -81,10 +137,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 60.92736053466797,
-        "output_scale": 54.487060546875,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            60.92736053466797
+        ],
+        "outputs_scale": [
+            54.487060546875
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -92,10 +156,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 54.487060546875,
-        "output_scale": 54.335365295410156,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            54.487060546875
+        ],
+        "outputs_scale": [
+            54.335365295410156
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -103,10 +175,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 54.335365295410156,
-        "output_scale": 54.335365295410156,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            54.335365295410156
+        ],
+        "outputs_scale": [
+            54.335365295410156
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -114,10 +194,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 54.335365295410156,
-        "output_scale": 162.5008544921875,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            54.335365295410156
+        ],
+        "outputs_scale": [
+            162.5008544921875
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -125,10 +213,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 162.5008544921875,
-        "output_scale": 57.67489242553711,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            162.5008544921875
+        ],
+        "outputs_scale": [
+            57.67489242553711
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -136,10 +232,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 19.62986946105957,
-        "output_scale": 20.795976638793945,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            19.62986946105957
+        ],
+        "outputs_scale": [
+            20.795976638793945
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -147,10 +251,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 20.795976638793945,
-        "output_scale": 21.339351654052734,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            20.795976638793945
+        ],
+        "outputs_scale": [
+            21.339351654052734
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -158,10 +270,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 21.617403030395508,
-        "output_scale": 21.617403030395508,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            21.617403030395508
+        ],
+        "outputs_scale": [
+            21.617403030395508
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -169,10 +289,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 32.070404052734375,
-        "output_scale": 66.95381927490234,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            32.070404052734375
+        ],
+        "outputs_scale": [
+            66.95381927490234
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -180,10 +308,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 66.95381927490234,
-        "output_scale": 50.93474578857422,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            66.95381927490234
+        ],
+        "outputs_scale": [
+            50.93474578857422
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -191,10 +327,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 50.93474578857422,
-        "output_scale": 50.93474578857422,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            50.93474578857422
+        ],
+        "outputs_scale": [
+            50.93474578857422
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -202,10 +346,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 56.621498107910156,
-        "output_scale": 74.6642837524414,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            56.621498107910156
+        ],
+        "outputs_scale": [
+            74.6642837524414
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -213,10 +365,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 74.6642837524414,
-        "output_scale": 44.7791862487793,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            74.6642837524414
+        ],
+        "outputs_scale": [
+            44.7791862487793
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -224,10 +384,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 44.7791862487793,
-        "output_scale": 44.7791862487793,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            44.7791862487793
+        ],
+        "outputs_scale": [
+            44.7791862487793
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -235,10 +403,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 44.7791862487793,
-        "output_scale": 146.96316528320312,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            44.7791862487793
+        ],
+        "outputs_scale": [
+            146.96316528320312
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -246,10 +422,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 146.96316528320312,
-        "output_scale": 51.636314392089844,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            146.96316528320312
+        ],
+        "outputs_scale": [
+            51.636314392089844
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -257,10 +441,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 30.250747680664062,
-        "output_scale": 30.250747680664062,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            30.250747680664062
+        ],
+        "outputs_scale": [
+            30.250747680664062
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -268,10 +460,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 30.250747680664062,
-        "output_scale": 81.72404479980469,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            30.250747680664062
+        ],
+        "outputs_scale": [
+            81.72404479980469
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -279,10 +479,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 81.72404479980469,
-        "output_scale": 49.998538970947266,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            81.72404479980469
+        ],
+        "outputs_scale": [
+            49.998538970947266
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -290,10 +498,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 49.998538970947266,
-        "output_scale": 49.998538970947266,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            49.998538970947266
+        ],
+        "outputs_scale": [
+            49.998538970947266
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -301,10 +517,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 60.484107971191406,
-        "output_scale": 79.79732513427734,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            60.484107971191406
+        ],
+        "outputs_scale": [
+            79.79732513427734
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -312,10 +536,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 79.79732513427734,
-        "output_scale": 41.56911087036133,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            79.79732513427734
+        ],
+        "outputs_scale": [
+            41.56911087036133
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -323,10 +555,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 41.56911087036133,
-        "output_scale": 41.56911087036133,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            41.56911087036133
+        ],
+        "outputs_scale": [
+            41.56911087036133
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -334,10 +574,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 41.56911087036133,
-        "output_scale": 178.07887268066406,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            41.56911087036133
+        ],
+        "outputs_scale": [
+            178.07887268066406
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -345,10 +593,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 178.07887268066406,
-        "output_scale": 42.91557312011719,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            178.07887268066406
+        ],
+        "outputs_scale": [
+            42.91557312011719
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -356,10 +612,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 28.887311935424805,
-        "output_scale": 28.887311935424805,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            28.887311935424805
+        ],
+        "outputs_scale": [
+            28.887311935424805
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -367,10 +631,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 28.887311935424805,
-        "output_scale": 39.842308044433594,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            28.887311935424805
+        ],
+        "outputs_scale": [
+            39.842308044433594
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -378,10 +650,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 39.842308044433594,
-        "output_scale": 33.3313102722168,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            39.842308044433594
+        ],
+        "outputs_scale": [
+            33.3313102722168
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -389,10 +669,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 33.3313102722168,
-        "output_scale": 33.3313102722168,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            33.3313102722168
+        ],
+        "outputs_scale": [
+            33.3313102722168
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -400,10 +688,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 33.3313102722168,
-        "output_scale": 53.19645690917969,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            33.3313102722168
+        ],
+        "outputs_scale": [
+            53.19645690917969
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -411,10 +707,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 53.19645690917969,
-        "output_scale": 41.8708610534668,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            53.19645690917969
+        ],
+        "outputs_scale": [
+            41.8708610534668
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -422,10 +726,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 41.8708610534668,
-        "output_scale": 41.8708610534668,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            41.8708610534668
+        ],
+        "outputs_scale": [
+            41.8708610534668
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -433,10 +745,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 41.8708610534668,
-        "output_scale": 74.36505889892578,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            41.8708610534668
+        ],
+        "outputs_scale": [
+            74.36505889892578
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -444,10 +764,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 74.36505889892578,
-        "output_scale": 26.389829635620117,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            74.36505889892578
+        ],
+        "outputs_scale": [
+            26.389829635620117
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -455,10 +783,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 28.887311935424805,
-        "output_scale": 71.07736206054688,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            28.887311935424805
+        ],
+        "outputs_scale": [
+            71.07736206054688
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -466,10 +802,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 71.07736206054688,
-        "output_scale": 39.78800582885742,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            71.07736206054688
+        ],
+        "outputs_scale": [
+            39.78800582885742
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -477,10 +821,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 25.15196418762207,
-        "output_scale": 25.15196418762207,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            25.15196418762207
+        ],
+        "outputs_scale": [
+            25.15196418762207
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -488,10 +840,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 25.15196418762207,
-        "output_scale": 48.81798553466797,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            25.15196418762207
+        ],
+        "outputs_scale": [
+            48.81798553466797
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -499,10 +859,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 48.81798553466797,
-        "output_scale": 87.49695587158203,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            48.81798553466797
+        ],
+        "outputs_scale": [
+            87.49695587158203
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -510,10 +878,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 87.49695587158203,
-        "output_scale": 87.49695587158203,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            87.49695587158203
+        ],
+        "outputs_scale": [
+            87.49695587158203
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -521,10 +897,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 87.49695587158203,
-        "output_scale": 44.86371612548828,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            87.49695587158203
+        ],
+        "outputs_scale": [
+            44.86371612548828
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -532,10 +916,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 44.86371612548828,
-        "output_scale": 56.634639739990234,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            44.86371612548828
+        ],
+        "outputs_scale": [
+            56.634639739990234
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -543,10 +935,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 56.634639739990234,
-        "output_scale": 56.634639739990234,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            56.634639739990234
+        ],
+        "outputs_scale": [
+            56.634639739990234
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -554,10 +954,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 58.321380615234375,
-        "output_scale": 67.38790893554688,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            58.321380615234375
+        ],
+        "outputs_scale": [
+            67.38790893554688
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -565,10 +973,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 67.38790893554688,
-        "output_scale": 25.196077346801758,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            67.38790893554688
+        ],
+        "outputs_scale": [
+            25.196077346801758
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -576,10 +992,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 25.196077346801758,
-        "output_scale": 25.196077346801758,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            25.196077346801758
+        ],
+        "outputs_scale": [
+            25.196077346801758
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -587,10 +1011,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 25.196739196777344,
-        "output_scale": 60.55218505859375,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            25.196739196777344
+        ],
+        "outputs_scale": [
+            60.55218505859375
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -598,10 +1030,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 60.55218505859375,
-        "output_scale": 61.03083801269531,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            60.55218505859375
+        ],
+        "outputs_scale": [
+            61.03083801269531
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -609,10 +1049,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 61.03083801269531,
-        "output_scale": 61.03083801269531,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            61.03083801269531
+        ],
+        "outputs_scale": [
+            61.03083801269531
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -620,10 +1068,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 61.03083801269531,
-        "output_scale": 83.00711822509766,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            61.03083801269531
+        ],
+        "outputs_scale": [
+            83.00711822509766
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -631,10 +1087,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 83.00711822509766,
-        "output_scale": 70.0377197265625,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            83.00711822509766
+        ],
+        "outputs_scale": [
+            70.0377197265625
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -642,10 +1106,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 70.0377197265625,
-        "output_scale": 70.0377197265625,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            70.0377197265625
+        ],
+        "outputs_scale": [
+            70.0377197265625
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -653,10 +1125,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 71.06159973144531,
-        "output_scale": 230.29400634765625,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            71.06159973144531
+        ],
+        "outputs_scale": [
+            230.29400634765625
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -664,10 +1144,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 230.29400634765625,
-        "output_scale": 58.98253631591797,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            230.29400634765625
+        ],
+        "outputs_scale": [
+            58.98253631591797
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -675,10 +1163,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 25.237228393554688,
-        "output_scale": 25.237228393554688,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            25.237228393554688
+        ],
+        "outputs_scale": [
+            25.237228393554688
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -686,10 +1182,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 25.237228393554688,
-        "output_scale": 76.88341522216797,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            25.237228393554688
+        ],
+        "outputs_scale": [
+            76.88341522216797
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -697,10 +1201,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 76.88341522216797,
-        "output_scale": 52.605777740478516,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            76.88341522216797
+        ],
+        "outputs_scale": [
+            52.605777740478516
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -708,10 +1220,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 52.605777740478516,
-        "output_scale": 52.605777740478516,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            52.605777740478516
+        ],
+        "outputs_scale": [
+            52.605777740478516
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -719,10 +1239,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 52.605777740478516,
-        "output_scale": 69.88322448730469,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            52.605777740478516
+        ],
+        "outputs_scale": [
+            69.88322448730469
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -730,10 +1258,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 69.88322448730469,
-        "output_scale": 40.08079147338867,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            69.88322448730469
+        ],
+        "outputs_scale": [
+            40.08079147338867
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -741,10 +1277,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 40.08079147338867,
-        "output_scale": 40.08079147338867,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            40.08079147338867
+        ],
+        "outputs_scale": [
+            40.08079147338867
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -752,10 +1296,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 40.08079147338867,
-        "output_scale": 164.3314666748047,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            40.08079147338867
+        ],
+        "outputs_scale": [
+            164.3314666748047
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -763,10 +1315,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 164.3314666748047,
-        "output_scale": 47.09740447998047,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            164.3314666748047
+        ],
+        "outputs_scale": [
+            47.09740447998047
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -774,10 +1334,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 28.055095672607422,
-        "output_scale": 28.055095672607422,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            28.055095672607422
+        ],
+        "outputs_scale": [
+            28.055095672607422
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -785,10 +1353,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 28.055095672607422,
-        "output_scale": 52.33467102050781,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            28.055095672607422
+        ],
+        "outputs_scale": [
+            52.33467102050781
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -796,10 +1372,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 52.33467102050781,
-        "output_scale": 32.00841522216797,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            52.33467102050781
+        ],
+        "outputs_scale": [
+            32.00841522216797
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -807,10 +1391,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 32.00841522216797,
-        "output_scale": 32.00841522216797,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            32.00841522216797
+        ],
+        "outputs_scale": [
+            32.00841522216797
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -818,10 +1410,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 32.00841522216797,
-        "output_scale": 40.276126861572266,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            32.00841522216797
+        ],
+        "outputs_scale": [
+            40.276126861572266
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -829,10 +1429,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 40.276126861572266,
-        "output_scale": 59.70025634765625,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            40.276126861572266
+        ],
+        "outputs_scale": [
+            59.70025634765625
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -840,10 +1448,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 59.70025634765625,
-        "output_scale": 59.70025634765625,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            59.70025634765625
+        ],
+        "outputs_scale": [
+            59.70025634765625
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -851,10 +1467,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 60.704742431640625,
-        "output_scale": 129.7169189453125,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            60.704742431640625
+        ],
+        "outputs_scale": [
+            129.7169189453125
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -862,10 +1486,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 129.7169189453125,
-        "output_scale": 35.42304992675781,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            129.7169189453125
+        ],
+        "outputs_scale": [
+            35.42304992675781
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -873,10 +1505,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 28.055095672607422,
-        "output_scale": 97.77935791015625,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            28.055095672607422
+        ],
+        "outputs_scale": [
+            97.77935791015625
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -884,10 +1524,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 97.77935791015625,
-        "output_scale": 66.81363677978516,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            97.77935791015625
+        ],
+        "outputs_scale": [
+            66.81363677978516
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -895,10 +1543,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 32.81127166748047,
-        "output_scale": 32.81127166748047,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            32.81127166748047
+        ],
+        "outputs_scale": [
+            32.81127166748047
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -906,10 +1562,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 32.81127166748047,
-        "output_scale": 52.318241119384766,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            32.81127166748047
+        ],
+        "outputs_scale": [
+            52.318241119384766
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -917,10 +1581,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 52.318241119384766,
-        "output_scale": 41.814083099365234,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            52.318241119384766
+        ],
+        "outputs_scale": [
+            41.814083099365234
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -928,10 +1600,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 41.814083099365234,
-        "output_scale": 41.814083099365234,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            41.814083099365234
+        ],
+        "outputs_scale": [
+            41.814083099365234
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -939,10 +1619,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 41.814083099365234,
-        "output_scale": 73.95165252685547,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            41.814083099365234
+        ],
+        "outputs_scale": [
+            73.95165252685547
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -950,10 +1638,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 73.95165252685547,
-        "output_scale": 64.20613098144531,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            73.95165252685547
+        ],
+        "outputs_scale": [
+            64.20613098144531
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -961,10 +1657,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 64.20613098144531,
-        "output_scale": 64.20613098144531,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            64.20613098144531
+        ],
+        "outputs_scale": [
+            64.20613098144531
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -972,10 +1676,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 64.20613098144531,
-        "output_scale": 95.64199829101562,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            64.20613098144531
+        ],
+        "outputs_scale": [
+            95.64199829101562
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -983,10 +1695,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 95.64199829101562,
-        "output_scale": 34.813899993896484,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            95.64199829101562
+        ],
+        "outputs_scale": [
+            34.813899993896484
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -994,10 +1714,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 27.180374145507812,
-        "output_scale": 27.180374145507812,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            27.180374145507812
+        ],
+        "outputs_scale": [
+            27.180374145507812
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1005,10 +1733,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 27.180374145507812,
-        "output_scale": 90.0003433227539,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            27.180374145507812
+        ],
+        "outputs_scale": [
+            90.0003433227539
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1016,10 +1752,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 90.0003433227539,
-        "output_scale": 68.98503112792969,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            90.0003433227539
+        ],
+        "outputs_scale": [
+            68.98503112792969
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1027,10 +1771,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 68.98503112792969,
-        "output_scale": 68.98503112792969,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            68.98503112792969
+        ],
+        "outputs_scale": [
+            68.98503112792969
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1038,10 +1790,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 68.98503112792969,
-        "output_scale": 84.52738952636719,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            68.98503112792969
+        ],
+        "outputs_scale": [
+            84.52738952636719
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1049,10 +1809,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 84.52738952636719,
-        "output_scale": 71.8412094116211,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            84.52738952636719
+        ],
+        "outputs_scale": [
+            71.8412094116211
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1060,10 +1828,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 71.8412094116211,
-        "output_scale": 71.8412094116211,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            71.8412094116211
+        ],
+        "outputs_scale": [
+            71.8412094116211
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1071,10 +1847,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 92.63419342041016,
-        "output_scale": 293.98406982421875,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            92.63419342041016
+        ],
+        "outputs_scale": [
+            293.98406982421875
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1082,10 +1866,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 293.98406982421875,
-        "output_scale": 73.78905487060547,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            293.98406982421875
+        ],
+        "outputs_scale": [
+            73.78905487060547
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1093,10 +1885,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 29.38429069519043,
-        "output_scale": 29.38429069519043,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            29.38429069519043
+        ],
+        "outputs_scale": [
+            29.38429069519043
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1104,10 +1904,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 29.38429069519043,
-        "output_scale": 86.844482421875,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            29.38429069519043
+        ],
+        "outputs_scale": [
+            86.844482421875
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1115,10 +1923,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 86.844482421875,
-        "output_scale": 51.375423431396484,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            86.844482421875
+        ],
+        "outputs_scale": [
+            51.375423431396484
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1126,10 +1942,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 51.375423431396484,
-        "output_scale": 51.375423431396484,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            51.375423431396484
+        ],
+        "outputs_scale": [
+            51.375423431396484
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1137,10 +1961,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 51.375423431396484,
-        "output_scale": 72.14393615722656,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            51.375423431396484
+        ],
+        "outputs_scale": [
+            72.14393615722656
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1148,10 +1980,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 72.14393615722656,
-        "output_scale": 63.673858642578125,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            72.14393615722656
+        ],
+        "outputs_scale": [
+            63.673858642578125
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1159,10 +1999,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 63.673858642578125,
-        "output_scale": 63.673858642578125,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            63.673858642578125
+        ],
+        "outputs_scale": [
+            63.673858642578125
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1170,10 +2018,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 79.7825927734375,
-        "output_scale": 147.27732849121094,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            79.7825927734375
+        ],
+        "outputs_scale": [
+            147.27732849121094
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1181,10 +2037,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 147.27732849121094,
-        "output_scale": 46.82186508178711,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            147.27732849121094
+        ],
+        "outputs_scale": [
+            46.82186508178711
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1192,10 +2056,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 25.324909210205078,
-        "output_scale": 25.324909210205078,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            25.324909210205078
+        ],
+        "outputs_scale": [
+            25.324909210205078
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1203,10 +2075,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 25.324909210205078,
-        "output_scale": 88.19300079345703,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            25.324909210205078
+        ],
+        "outputs_scale": [
+            88.19300079345703
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1214,10 +2094,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 88.19300079345703,
-        "output_scale": 42.58589553833008,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            88.19300079345703
+        ],
+        "outputs_scale": [
+            42.58589553833008
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1225,10 +2113,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 42.58589553833008,
-        "output_scale": 42.58589553833008,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            42.58589553833008
+        ],
+        "outputs_scale": [
+            42.58589553833008
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1236,10 +2132,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 42.58589553833008,
-        "output_scale": 118.50977325439453,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            42.58589553833008
+        ],
+        "outputs_scale": [
+            118.50977325439453
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1247,10 +2151,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 118.50977325439453,
-        "output_scale": 67.09174346923828,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            118.50977325439453
+        ],
+        "outputs_scale": [
+            67.09174346923828
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1258,10 +2170,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 67.09174346923828,
-        "output_scale": 67.09174346923828,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            67.09174346923828
+        ],
+        "outputs_scale": [
+            67.09174346923828
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1269,10 +2189,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 67.09174346923828,
-        "output_scale": 225.5694580078125,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            67.09174346923828
+        ],
+        "outputs_scale": [
+            225.5694580078125
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1280,10 +2208,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 225.5694580078125,
-        "output_scale": 42.29037857055664,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            225.5694580078125
+        ],
+        "outputs_scale": [
+            42.29037857055664
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1291,10 +2227,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 24.74615478515625,
-        "output_scale": 24.74615478515625,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            24.74615478515625
+        ],
+        "outputs_scale": [
+            24.74615478515625
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1302,10 +2246,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 24.74615478515625,
-        "output_scale": 74.24960327148438,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            24.74615478515625
+        ],
+        "outputs_scale": [
+            74.24960327148438
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1313,10 +2265,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 74.24960327148438,
-        "output_scale": 44.7236213684082,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            74.24960327148438
+        ],
+        "outputs_scale": [
+            44.7236213684082
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1324,10 +2284,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 44.7236213684082,
-        "output_scale": 44.7236213684082,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            44.7236213684082
+        ],
+        "outputs_scale": [
+            44.7236213684082
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1335,10 +2303,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 44.7236213684082,
-        "output_scale": 78.7657241821289,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            44.7236213684082
+        ],
+        "outputs_scale": [
+            78.7657241821289
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1346,10 +2322,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 78.7657241821289,
-        "output_scale": 40.990055084228516,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            78.7657241821289
+        ],
+        "outputs_scale": [
+            40.990055084228516
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1357,10 +2341,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 40.990055084228516,
-        "output_scale": 40.990055084228516,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            40.990055084228516
+        ],
+        "outputs_scale": [
+            40.990055084228516
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1368,10 +2360,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 40.990055084228516,
-        "output_scale": 86.58740997314453,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            40.990055084228516
+        ],
+        "outputs_scale": [
+            86.58740997314453
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1379,10 +2379,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 86.58740997314453,
-        "output_scale": 28.525489807128906,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            86.58740997314453
+        ],
+        "outputs_scale": [
+            28.525489807128906
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1390,10 +2398,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 28.996570587158203,
-        "output_scale": 28.996570587158203,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            28.996570587158203
+        ],
+        "outputs_scale": [
+            28.996570587158203
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1401,10 +2417,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 30.551538467407227,
-        "output_scale": 59.8302001953125,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            30.551538467407227
+        ],
+        "outputs_scale": [
+            59.8302001953125
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1412,10 +2436,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 59.8302001953125,
-        "output_scale": 45.66354751586914,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            59.8302001953125
+        ],
+        "outputs_scale": [
+            45.66354751586914
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1423,10 +2455,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 45.66354751586914,
-        "output_scale": 45.66354751586914,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            45.66354751586914
+        ],
+        "outputs_scale": [
+            45.66354751586914
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1434,10 +2474,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 47.88484573364258,
-        "output_scale": 28.433767318725586,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            47.88484573364258
+        ],
+        "outputs_scale": [
+            28.433767318725586
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1445,10 +2493,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 28.433767318725586,
-        "output_scale": 45.043975830078125,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            28.433767318725586
+        ],
+        "outputs_scale": [
+            45.043975830078125
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1456,10 +2512,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 45.043975830078125,
-        "output_scale": 45.043975830078125,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            45.043975830078125
+        ],
+        "outputs_scale": [
+            45.043975830078125
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1467,10 +2531,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 45.043975830078125,
-        "output_scale": 98.39395904541016,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            45.043975830078125
+        ],
+        "outputs_scale": [
+            98.39395904541016
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1478,10 +2550,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 98.39395904541016,
-        "output_scale": 14.97519588470459,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            98.39395904541016
+        ],
+        "outputs_scale": [
+            14.97519588470459
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1489,10 +2569,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 30.551538467407227,
-        "output_scale": 119.68870544433594,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            30.551538467407227
+        ],
+        "outputs_scale": [
+            119.68870544433594
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1500,10 +2588,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 119.68870544433594,
-        "output_scale": 13.999383926391602,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            119.68870544433594
+        ],
+        "outputs_scale": [
+            13.999383926391602
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1511,10 +2607,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 10.396424293518066,
-        "output_scale": 10.396424293518066,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            10.396424293518066
+        ],
+        "outputs_scale": [
+            10.396424293518066
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1522,10 +2626,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 10.396424293518066,
-        "output_scale": 20.48980140686035,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            10.396424293518066
+        ],
+        "outputs_scale": [
+            20.48980140686035
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1533,10 +2645,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 20.48980140686035,
-        "output_scale": 52.6564826965332,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            20.48980140686035
+        ],
+        "outputs_scale": [
+            52.6564826965332
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1544,10 +2664,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 52.6564826965332,
-        "output_scale": 52.6564826965332,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            52.6564826965332
+        ],
+        "outputs_scale": [
+            52.6564826965332
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1555,10 +2683,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 52.6564826965332,
-        "output_scale": 80.84308624267578,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            52.6564826965332
+        ],
+        "outputs_scale": [
+            80.84308624267578
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1566,10 +2702,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 80.84308624267578,
-        "output_scale": 48.69487762451172,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            80.84308624267578
+        ],
+        "outputs_scale": [
+            48.69487762451172
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1577,10 +2721,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 48.69487762451172,
-        "output_scale": 48.69487762451172,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            48.69487762451172
+        ],
+        "outputs_scale": [
+            48.69487762451172
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1588,10 +2740,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 64.40233612060547,
-        "output_scale": 198.51699829101562,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            64.40233612060547
+        ],
+        "outputs_scale": [
+            198.51699829101562
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1599,10 +2759,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 198.51699829101562,
-        "output_scale": 20.14201545715332,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            198.51699829101562
+        ],
+        "outputs_scale": [
+            20.14201545715332
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1610,10 +2778,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 8.616843223571777,
-        "output_scale": 8.616843223571777,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            8.616843223571777
+        ],
+        "outputs_scale": [
+            8.616843223571777
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1621,10 +2797,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 8.616843223571777,
-        "output_scale": 13.367753028869629,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            8.616843223571777
+        ],
+        "outputs_scale": [
+            13.367753028869629
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1632,10 +2816,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 13.367753028869629,
-        "output_scale": 27.79578399658203,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            13.367753028869629
+        ],
+        "outputs_scale": [
+            27.79578399658203
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1643,10 +2835,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 27.79578399658203,
-        "output_scale": 27.79578399658203,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            27.79578399658203
+        ],
+        "outputs_scale": [
+            27.79578399658203
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1654,10 +2854,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 42.59839630126953,
-        "output_scale": 101.67986297607422,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            42.59839630126953
+        ],
+        "outputs_scale": [
+            101.67986297607422
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1665,10 +2873,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 101.67986297607422,
-        "output_scale": 43.32054138183594,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            101.67986297607422
+        ],
+        "outputs_scale": [
+            43.32054138183594
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1676,10 +2892,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 43.32054138183594,
-        "output_scale": 43.32054138183594,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            43.32054138183594
+        ],
+        "outputs_scale": [
+            43.32054138183594
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1687,10 +2911,18 @@
         "name": "Convolution",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 63.523677825927734,
-        "output_scale": 178.05685424804688,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            63.523677825927734
+        ],
+        "outputs_scale": [
+            178.05685424804688
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1698,10 +2930,18 @@
         "name": "BatchNorm",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 178.05685424804688,
-        "output_scale": 6.816678524017334,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            178.05685424804688
+        ],
+        "outputs_scale": [
+            6.816678524017334
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1709,10 +2949,18 @@
         "name": "Relu_",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 5.212673187255859,
-        "output_scale": 5.212673187255859,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            5.212673187255859
+        ],
+        "outputs_scale": [
+            5.212673187255859
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1720,10 +2968,18 @@
         "name": "AdaptiveAvgPool2d",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 5.212673187255859,
-        "output_scale": 5.212673187255859,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            5.212673187255859
+        ],
+        "outputs_scale": [
+            5.212673187255859
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     },
     {
@@ -1731,10 +2987,18 @@
         "name": "Linear",
         "algorithm": "min_max",
         "weight_granularity": "per_tensor",
-        "input_scale": 17.14492416381836,
-        "output_scale": 4.3715033531188965,
-        "input_uint8_used": false,
-        "output_uint8_used": false,
+        "inputs_scale": [
+            17.14492416381836
+        ],
+        "outputs_scale": [
+            4.3715033531188965
+        ],
+        "inputs_uint8_used": [
+            false
+        ],
+        "outputs_uint8_used": [
+            false
+        ],
         "quantized": true
     }
 ]

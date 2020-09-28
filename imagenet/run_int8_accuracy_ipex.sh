@@ -48,7 +48,7 @@ if [ "$5" == "jit" ]; then
     ARGS="$ARGS --jit"
     echo "### running jit fusion path"
 else
-    echo "### running jit fusion path"
+    echo "### running not jit fusion path"
 fi
 
 if [ "$7" == "calibration" ]; then
