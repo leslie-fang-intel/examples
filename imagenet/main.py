@@ -383,7 +383,7 @@ def validate(val_loader, model, criterion, args):
         with torch.no_grad():
             end = time.time()
             for i, (images, target) in enumerate(val_loader):
-                with ipex.enable_auto_mix_precision(conf, running_mode="calibration"):
+                with ipex.AutoMixPrecision(conf, running_mode="calibration"):
                     images = images.to(device = 'dpcpp:0')
                     # compute output
                     output = model(images)
@@ -430,7 +430,7 @@ def validate(val_loader, model, criterion, args):
                 target = target.to(device = 'dpcpp:0')
                 with torch.no_grad():
                     for i in range(number_iter):
-                        with ipex.enable_auto_mix_precision(conf, running_mode="inference"):
+                        with ipex.AutoMixPrecision(conf, running_mode="inference"):
                             if i >= args.warmup_iterations:
                                 end = time.time()
                             # compute output
@@ -476,7 +476,7 @@ def validate(val_loader, model, criterion, args):
                 with torch.no_grad():
                     end = time.time()
                     for i, (images, target) in enumerate(val_loader):
-                        with ipex.enable_auto_mix_precision(conf, running_mode="inference"):
+                        with ipex.AutoMixPrecision(conf, running_mode="inference"):
                             images = images.to(device = 'dpcpp:0')
                             target = target.to(device = 'dpcpp:0')
                             # compute output
