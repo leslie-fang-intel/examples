@@ -18,9 +18,6 @@ import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import torchvision.models as models
 
-import intel_pytorch_extension as ipex
-import _torch_ipex as core
-
 model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
     and callable(models.__dict__[name]))
@@ -81,16 +78,10 @@ parser.add_argument('--ipex', action='store_true', default=False,
                     help='use intel pytorch extension')
 parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='disable CUDA')
-parser.add_argument('--dnnl', action='store_true', default=False,
-                    help='enable Intel_PyTorch_Extension auto dnnl path')
-parser.add_argument('--int8', action='store_true', default=False,
-                    help='enable ipex int8 path')
+parser.add_argument('--precision', default='fp32', type=str,
+                    help='set precision of running model, can be fp32, bf16 or int8(todo)')
 parser.add_argument('--jit', action='store_true', default=False,
-                    help='enable ipex jit fusionpath')
-parser.add_argument('--calibration', action='store_true', default=False,
-                    help='doing calibration step')
-parser.add_argument('--configure-dir', default='configure.json', type=str, metavar='PATH',
-                    help = 'path to int8 configures, default file name is configure.json')
+                    help='enable jit fusion path')
 parser.add_argument("--dummy", action='store_true',
                     help="using  dummu data to test the performance of inference")
 parser.add_argument('-w', '--warmup-iterations', default=30, type=int, metavar='N',
@@ -104,11 +95,17 @@ def main():
     args.cuda = not args.no_cuda and torch.cuda.is_available()
     print(args)
     if args.ipex:
+        print("enable intel pytorch extension path will get good performance")
+        import intel_pytorch_extension
         import intel_pytorch_extension as ipex
-    if args.dnnl:
-        ipex.core.enable_auto_dnnl()
-    else:
-        ipex.core.disable_auto_dnnl()
+    if args.precision == 'bf16':
+        assert args.ipex, 'please first enable ipex by add option --ipex to run bfloat16 path'
+        print("enable intel pytorch extension mix presion(fp32+bf16)path")
+        ipex.enable_auto_optimization(mixed_dtype = torch.bfloat16,
+                                      train = False if args.evaluate else True)
+
+    if args.jit:
+        assert args.evaluate, 'jit fusion path only support evaluation step'
 
     if args.seed is not None:
         random.seed(args.seed)
@@ -340,6 +337,9 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
             images = images.cuda(args.gpu, non_blocking=True)
         if torch.cuda.is_available():
             target = target.cuda(args.gpu, non_blocking=True)
+        if args.ipex:
+            images = images.to(device = 'dpcpp:0')
+            target = target.to(device = 'dpcpp:0')
 
         # compute output
         output = model(images)
@@ -377,151 +377,68 @@ def validate(val_loader, model, criterion, args):
     # switch to evaluate mode
     model.eval()
 
-    if args.ipex and args.int8 and args.calibration:
-        print("runing int8 calibration step\n")
-        conf = ipex.AmpConf(torch.int8)
+    if args.dummy:
+        print("using dummy input data to run")
+        images = torch.randn(args.batch_size, 3, 224, 224)
+        target = torch.arange(1, args.batch_size + 1).long()
+        if args.gpu is not None and args.cuda:
+            images = images.cuda(args.gpu, non_blocking=True)
+        if args.cuda:
+            arget = target.cuda(args.gpu, non_blocking=True)
+        if args.ipex:
+            images = images.to(device = 'dpcpp:0')
+            target = target.to(device = 'dpcpp:0')
+
+        number_iter = len(val_loader)
+        with torch.no_grad():
+            for i in range(number_iter):
+                if i >= args.warmup_iterations:
+                    end = time.time()
+                # compute output
+                output = model(images)
+                if i >= args.warmup_iterations:
+                    batch_time.update(time.time() - end)
+
+                #print(output)
+                loss = criterion(output, target)
+
+                # measure accuracy and record loss
+                acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                losses.update(loss.item(), images.size(0))
+                top1.update(acc1[0], images.size(0))
+                top5.update(acc5[0], images.size(0))
+
+                if i % args.print_freq == 0:
+                    progress.display(i)
+    else:
+        print("using real dataset to run")
         with torch.no_grad():
             end = time.time()
             for i, (images, target) in enumerate(val_loader):
-                with ipex.AutoMixedPrecision(conf, running_mode="calibration"):
+                if args.gpu is not None and args.cuda:
+                    images = images.cuda(args.gpu, non_blocking=True)
+                if args.cuda:
+                    target = target.cuda(args.gpu, non_blocking=True)
+                if args.ipex:
                     images = images.to(device = 'dpcpp:0')
-                    # compute output
-                    output = model(images)
-                    loss = criterion(output, target)
+                    target = target.to(device = 'dpcpp:0')
+                # compute output
+                output = model(images)
+                #print(output)
+                loss = criterion(output, target)
 
-                    # measure accuracy and record loss
-                    acc1, acc5 = accuracy(output, target, topk=(1, 5))
-                    losses.update(loss.item(), images.size(0))
-                    top1.update(acc1[0], images.size(0))
-                    top5.update(acc5[0], images.size(0))
+                # measure accuracy and record loss
+                acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                losses.update(loss.item(), images.size(0))
+                top1.update(acc1[0], images.size(0))
+                top5.update(acc5[0], images.size(0))
 
-                    # measure elapsed time
-                    batch_time.update(time.time() - end)
-                    end = time.time()
+                # measure elapsed time
+                batch_time.update(time.time() - end)
+                end = time.time()
 
-                    if i % args.print_freq == 0:
-                        progress.display(i)
-                    if i == 10:
-                        break
-
-            conf.save(args.configure_dir)
-            # TODO: this should also be done with the ProgressMeter
-            print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
-                  .format(top1=top1, top5=top5))
-    else:
-        if args.ipex:
-            if args.int8:
-                conf = ipex.AmpConf(torch.int8, args.configure_dir)
-                print("running int8 evalation step\n")
-            else:
-                conf = ipex.AmpConf(None)
-                print("running fp32 evalation step\n")
-        if args.dummy:
-            images = torch.randn(args.batch_size, 3, 224, 224)
-            target = torch.arange(1, args.batch_size + 1).long()
-            if args.gpu is not None and args.cuda:
-                images = images.cuda(args.gpu, non_blocking=True)
-            if args.cuda:
-                arget = target.cuda(args.gpu, non_blocking=True)
-
-            number_iter = len(val_loader)
-            if args.ipex:
-                images = images.to(device = 'dpcpp:0')
-                target = target.to(device = 'dpcpp:0')
-                with torch.no_grad():
-                    for i in range(number_iter):
-                        with ipex.AutoMixedPrecision(conf, running_mode="inference"):
-                            if i >= args.warmup_iterations:
-                                end = time.time()
-                            # compute output
-                            output = model(images)
-                            if i >= args.warmup_iterations:
-                                batch_time.update(time.time() - end)
-
-                            #print(output)
-                            loss = criterion(output, target)
-
-                            # measure accuracy and record loss
-                            acc1, acc5 = accuracy(output, target, topk=(1, 5))
-                            losses.update(loss.item(), images.size(0))
-                            top1.update(acc1[0], images.size(0))
-                            top5.update(acc5[0], images.size(0))
-
-
-                            if i % args.print_freq == 0:
-                                progress.display(i)
-            else:
-                with torch.no_grad():
-                    for i in range(number_iter):
-                        if i >= args.warmup_iterations:
-                            end = time.time()
-                        # compute output
-                        output = model(images)
-                        if i >= args.warmup_iterations:
-                            batch_time.update(time.time() - end)
-
-                        #print(output)
-                        loss = criterion(output, target)
-
-                        # measure accuracy and record loss
-                        acc1, acc5 = accuracy(output, target, topk=(1, 5))
-                        losses.update(loss.item(), images.size(0))
-                        top1.update(acc1[0], images.size(0))
-                        top5.update(acc5[0], images.size(0))
-
-                        if i % args.print_freq == 0:
-                            progress.display(i)
-        else:
-            if args.ipex:
-                with torch.no_grad():
-                    end = time.time()
-                    for i, (images, target) in enumerate(val_loader):
-                        with ipex.AutoMixedPrecision(conf, running_mode="inference"):
-                            images = images.to(device = 'dpcpp:0')
-                            target = target.to(device = 'dpcpp:0')
-                            # compute output
-                            output = model(images)
-                            #print(output)
-                            loss = criterion(output, target)
-
-                            # measure accuracy and record loss
-                            acc1, acc5 = accuracy(output, target, topk=(1, 5))
-                            losses.update(loss.item(), images.size(0))
-                            top1.update(acc1[0], images.size(0))
-                            top5.update(acc5[0], images.size(0))
-
-                            # measure elapsed time
-                            batch_time.update(time.time() - end)
-                            end = time.time()
-
-                            if i % args.print_freq == 0:
-                                progress.display(i)
-            else:
-                with torch.no_grad():
-                    end = time.time()
-                    for i, (images, target) in enumerate(val_loader):
-                        if args.gpu is not None and args.cuda:
-                            images = images.cuda(args.gpu, non_blocking=True)
-                        if args.cuda:
-                            target = target.cuda(args.gpu, non_blocking=True)
-
-                        # compute output
-                        output = model(images)
-                        #print(output)
-                        loss = criterion(output, target)
-
-                        # measure accuracy and record loss
-                        acc1, acc5 = accuracy(output, target, topk=(1, 5))
-                        losses.update(loss.item(), images.size(0))
-                        top1.update(acc1[0], images.size(0))
-                        top5.update(acc5[0], images.size(0))
-
-                        # measure elapsed time
-                        batch_time.update(time.time() - end)
-                        end = time.time()
-
-                        if i % args.print_freq == 0:
-                            progress.display(i)
+                if i % args.print_freq == 0:
+                    progress.display(i)
 
         batch_size = val_loader.batch_size
         latency = batch_time.avg / batch_size * 1000
