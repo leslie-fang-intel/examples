@@ -206,14 +206,14 @@ def main_worker(gpu, ngpus_per_node, args):
                 model.cuda()
 
     if args.ipex:
-        model = model.to(device = 'dpcpp:0')
+        model = model.to(device = ipex.DEVICE)
     # define loss function (criterion) and optimizer
 
     criterion = nn.CrossEntropyLoss()
     if args.cuda:
         criterion = criterion.cuda(args.gpu)
     elif args.ipex:
-        criterion = criterion.to(device = 'dpcpp:0')
+        criterion = criterion.to(device = ipex.DEVICE)
 
     optimizer = torch.optim.SGD(model.parameters(), args.lr,
                                 momentum=args.momentum,
@@ -284,7 +284,7 @@ def main_worker(gpu, ngpus_per_node, args):
         train_loader = None
         val_loader = None
 
-    
+
     if args.evaluate:
         if args.ipex:
             print("using ipex model to do inference\n")
@@ -396,7 +396,7 @@ def validate(val_loader, model, criterion, args):
             end = time.time()
             for i, (images, target) in enumerate(val_loader):
                 with ipex.AutoMixPrecision(conf, running_mode="calibration"):
-                    images = images.to(device = 'dpcpp:0')
+                    images = images.to(device = ipex.DEVICE)
                     # compute output
                     output = model(images)
                     loss = criterion(output, target)
@@ -437,8 +437,8 @@ def validate(val_loader, model, criterion, args):
                 arget = target.cuda(args.gpu, non_blocking=True)
 
             if args.ipex:
-                images = images.to(device = 'dpcpp:0')
-                target = target.to(device = 'dpcpp:0')
+                images = images.to(device = ipex.DEVICE)
+                target = target.to(device = ipex.DEVICE)
                 with torch.no_grad():
                     for i in range(number_iter):
                         with ipex.AutoMixPrecision(conf, running_mode="inference"):
@@ -488,8 +488,8 @@ def validate(val_loader, model, criterion, args):
                     end = time.time()
                     for i, (images, target) in enumerate(val_loader):
                         with ipex.AutoMixPrecision(conf, running_mode="inference"):
-                            images = images.to(device = 'dpcpp:0')
-                            target = target.to(device = 'dpcpp:0')
+                            images = images.to(device = ipex.DEVICE)
+                            target = target.to(device = ipex.DEVICE)
                             # compute output
                             output = model(images)
                             #print(output)
