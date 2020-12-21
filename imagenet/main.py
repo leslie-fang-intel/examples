@@ -485,13 +485,18 @@ def validate(val_loader, model, criterion, args):
         else:
             if args.ipex:
                 with torch.no_grad():
-                    end = time.time()
                     for i, (images, target) in enumerate(val_loader):
                         with ipex.AutoMixPrecision(conf, running_mode="inference"):
                             images = images.to(device = ipex.DEVICE)
                             target = target.to(device = ipex.DEVICE)
                             # compute output
+                            if i >= args.warmup_iterations:
+                                end = time.time()
+                            # compute output
                             output = model(images)
+                            if i >= args.warmup_iterations:
+                                batch_time.update(time.time() - end)
+
                             #print(output)
                             loss = criterion(output, target)
 
@@ -500,10 +505,6 @@ def validate(val_loader, model, criterion, args):
                             losses.update(loss.item(), images.size(0))
                             top1.update(acc1[0], images.size(0))
                             top5.update(acc5[0], images.size(0))
-
-                            # measure elapsed time
-                            batch_time.update(time.time() - end)
-                            end = time.time()
 
                             if i % args.print_freq == 0:
                                 progress.display(i)
@@ -515,10 +516,13 @@ def validate(val_loader, model, criterion, args):
                             images = images.cuda(args.gpu, non_blocking=True)
                         if args.cuda:
                             target = target.cuda(args.gpu, non_blocking=True)
-
+                        # compute output
+                        if i >= args.warmup_iterations:
+                            end = time.time()
                         # compute output
                         output = model(images)
-                        #print(output)
+                        if i >= args.warmup_iterations:
+                            batch_time.update(time.time() - end)
                         loss = criterion(output, target)
 
                         # measure accuracy and record loss
@@ -526,10 +530,6 @@ def validate(val_loader, model, criterion, args):
                         losses.update(loss.item(), images.size(0))
                         top1.update(acc1[0], images.size(0))
                         top5.update(acc5[0], images.size(0))
-
-                        # measure elapsed time
-                        batch_time.update(time.time() - end)
-                        end = time.time()
 
                         if i % args.print_freq == 0:
                             progress.display(i)
