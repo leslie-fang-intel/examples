@@ -14,12 +14,12 @@ import torch.optim
 import torch.multiprocessing as mp
 import torch.utils.data
 import torch.utils.data.distributed
+import intel_pytorch_extension as ipex
+import _torch_ipex as core
+
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import torchvision.models as models
-
-import intel_pytorch_extension as ipex
-import _torch_ipex as core
 
 model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
@@ -380,6 +380,8 @@ def validate(val_loader, model, criterion, args):
         number_iter = 391
     else:
         number_iter = len(val_loader)
+    if args.calibration:
+        number_iter = 100
 
     progress = ProgressMeter(
         number_iter,

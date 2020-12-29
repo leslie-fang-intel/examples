@@ -52,7 +52,7 @@ else
 fi
 
 if [ "$7" == "calibration" ]; then
-    BATCH_SIZE=2
+    BATCH_SIZE=1
     ARGS="$ARGS --calibration"
     echo "### running int8 calibration"
 fi
