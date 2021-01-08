@@ -539,8 +539,8 @@ def validate(val_loader, model, criterion, args):
         batch_size = args.batch_size
         latency = batch_time.avg / batch_size * 1000
         perf = batch_size / batch_time.avg
-        print('inference latency %3.0f ms'%latency)
-        print('inference performance %3.0f fps'%perf)
+        print('inference latency %.3f ms'%latency)
+        print('inference performance %.3f fps'%perf)
 
         # TODO: this should also be done with the ProgressMeter
         print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
