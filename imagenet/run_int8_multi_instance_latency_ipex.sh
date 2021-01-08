@@ -9,7 +9,7 @@
 ###
 ###############################################################################
 
-export DNNL_PRIMITIVE_CACHE_CAPACITY=128
+export DNNL_PRIMITIVE_CACHE_CAPACITY=1024
 
 CONFIG_FILE=""
 ARGS=""
