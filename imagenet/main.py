@@ -377,7 +377,7 @@ def validate(val_loader, model, criterion, args):
     top1 = AverageMeter('Acc@1', ':6.2f')
     top5 = AverageMeter('Acc@5', ':6.2f')
     if args.dummy:
-        number_iter = 391
+        number_iter = 300
     else:
         number_iter = len(val_loader)
     if args.calibration:
@@ -431,18 +431,11 @@ def validate(val_loader, model, criterion, args):
                 conf = ipex.AmpConf(None)
                 print("running fp32 evalation step\n")
         if args.dummy:
-            images = torch.randn(args.batch_size, 3, 224, 224)
-            target = torch.arange(1, args.batch_size + 1).long()
-            if args.gpu is not None and args.cuda:
-                images = images.cuda(args.gpu, non_blocking=True)
-            if args.cuda:
-                arget = target.cuda(args.gpu, non_blocking=True)
-
             if args.ipex:
-                images = images.to(device = ipex.DEVICE)
-                target = target.to(device = ipex.DEVICE)
                 with torch.no_grad():
                     for i in range(number_iter):
+                        images = torch.randn(args.batch_size, 3, 224, 224).to(device = ipex.DEVICE)
+                        target = torch.arange(1, args.batch_size + 1).long().to(device = ipex.DEVICE)
                         with ipex.AutoMixPrecision(conf, running_mode="inference"):
                             if i >= args.warmup_iterations:
                                 end = time.time()
@@ -466,6 +459,13 @@ def validate(val_loader, model, criterion, args):
             else:
                 with torch.no_grad():
                     for i in range(number_iter):
+                        images = torch.randn(args.batch_size, 3, 224, 224)
+                        target = torch.arange(1, args.batch_size + 1).long()
+                        if args.gpu is not None and args.cuda:
+                            images = images.cuda(args.gpu, non_blocking=True)
+                        if args.cuda:
+                            target = target.cuda(args.gpu, non_blocking=True)
+
                         if i >= args.warmup_iterations:
                             end = time.time()
                         # compute output
