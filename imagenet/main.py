@@ -95,6 +95,8 @@ parser.add_argument("--dummy", action='store_true',
                     help="using  dummu data to test the performance of inference")
 parser.add_argument('-w', '--warmup-iterations', default=30, type=int, metavar='N',
                     help='number of warmup iterati ons to run')
+parser.add_argument('--autocast', action='store_true', default=False,
+                    help='enable autocast CPU in torch')
 
 best_acc1 = 0
 
@@ -105,11 +107,10 @@ def main():
     print(args)
     if args.ipex:
         import intel_pytorch_extension as ipex
-    if args.dnnl:
-        ipex.core.enable_auto_dnnl()
-    #else:
-        #import intel_pytorch_extension as ipex
-        #ipex.core.disable_auto_dnnl()
+        if args.dnnl:
+            ipex.core.enable_auto_dnnl()
+        else:
+            ipex.core.disable_auto_dnnl()
 
     if args.seed is not None:
         random.seed(args.seed)
@@ -148,6 +149,9 @@ def main_worker(gpu, ngpus_per_node, args):
     global best_acc1
     args.gpu = gpu
 
+    if args.ipex:
+        import intel_pytorch_extension as ipex
+        
     if args.gpu is not None:
         print("Use GPU: {} for training".format(args.gpu))
 
@@ -374,6 +378,8 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
 
 
 def validate(val_loader, model, criterion, args):
+    if args.ipex:
+       import intel_pytorch_extension as ipex 
     batch_time = AverageMeter('Time', ':6.3f')
     losses = AverageMeter('Loss', ':.4e')
     top1 = AverageMeter('Acc@1', ':6.2f')
@@ -441,7 +447,6 @@ def validate(val_loader, model, criterion, args):
                         images = torch.randn(args.batch_size, 3, 224, 224).to(device = ipex.DEVICE)
                         target = torch.arange(1, args.batch_size + 1).long().to(device = ipex.DEVICE)
                         with ipex.AutoMixPrecision(conf, running_mode="inference"):
-                        #with torch.cuda.amp.autocast(enabled=True):
                             if i >= args.warmup_iterations:
                                 end = time.time()
                             # compute output
@@ -492,34 +497,27 @@ def validate(val_loader, model, criterion, args):
                         if i >= args.warmup_iterations:
                             end = time.time()
                         # compute output
-                        with torch.cuda.amp.autocast(enabled=True):
-
-                            #if i == 11:
-                            #    with torch.autograd.profiler.profile(use_cuda=False, record_shapes=True) as prof:
-                            #        output = model(images)
-                            #    print(prof.key_averages().table(sort_by="self_cpu_time_total"))
-                            #    prof.export_chrome_trace("torch_throughput.json")
-                            #else:
-                            #   output = model(images) 
-
+                        if args.autocast:
+                            with torch.cuda.amp.autocast(enabled=True):
+                                #if i == 11:
+                                #    with torch.autograd.profiler.profile(use_cuda=False, record_shapes=True) as prof:
+                                #        output = model(images)
+                                #    print(prof.key_averages().table(sort_by="self_cpu_time_total"))
+                                #    prof.export_chrome_trace("torch_throughput.json")
+                                #else:
+                                #   output = model(images) 
+                                output = model(images)
+                                #output = output.to()
+                                if i >= args.warmup_iterations:
+                                  batch_time.update(time.time() - end)
+                                loss = criterion(output, target)
+                        else:
                             output = model(images)
-                            #output = output.to()
                             if i >= args.warmup_iterations:
-                              batch_time.update(time.time() - end)
+                                batch_time.update(time.time() - end)
+
+                            #output = output.to_dense()
                             loss = criterion(output, target)
-
-                            #output = output.to(torch.float32)
-                            #print(output)
-                            #output = output.to()
-                        #output = model(images)
-                        #if i >= args.warmup_iterations:
-                        #    batch_time.update(time.time() - end)
-
-                        #print(output)
-                        #output = output.to_dense()
-                        #loss = criterion(output, target)
-
-                        #loss = loss.to_dense()
 
                         # measure accuracy and record loss
                         print("LeslieDebug: Finish one step")
@@ -576,7 +574,14 @@ def validate(val_loader, model, criterion, args):
                         #    batch_time.update(time.time() - end)
                         #loss = criterion(output, target)
 
-                        with torch.cuda.amp.autocast(enabled=True):
+                        if args.autocast:
+                            with torch.cuda.amp.autocast(enabled=True):
+                                output = model(images)
+                                #print(output)
+                                if i >= args.warmup_iterations:
+                                    batch_time.update(time.time() - end)
+                                loss = criterion(output, target)
+                        else:
                             output = model(images)
                             #print(output)
                             if i >= args.warmup_iterations:
