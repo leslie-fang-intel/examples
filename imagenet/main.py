@@ -14,8 +14,8 @@ import torch.optim
 import torch.multiprocessing as mp
 import torch.utils.data
 import torch.utils.data.distributed
-import intel_pytorch_extension as ipex
-import _torch_ipex as core
+#import intel_pytorch_extension as ipex
+#import _torch_ipex as core
 
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
@@ -107,8 +107,9 @@ def main():
         import intel_pytorch_extension as ipex
     if args.dnnl:
         ipex.core.enable_auto_dnnl()
-    else:
-        ipex.core.disable_auto_dnnl()
+    #else:
+        #import intel_pytorch_extension as ipex
+        #ipex.core.disable_auto_dnnl()
 
     if args.seed is not None:
         random.seed(args.seed)
@@ -253,23 +254,24 @@ def main_worker(gpu, ngpus_per_node, args):
         normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                          std=[0.229, 0.224, 0.225])
 
-        train_dataset = datasets.ImageFolder(
-            traindir,
-            transforms.Compose([
-                transforms.RandomResizedCrop(224),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToTensor(),
-                normalize,
-            ]))
+        #train_dataset = datasets.ImageFolder(
+        #    traindir,
+        #    transforms.Compose([
+        #        transforms.RandomResizedCrop(224),
+        #        transforms.RandomHorizontalFlip(),
+        #        transforms.ToTensor(),
+        #        normalize,
+        #    ]))
 
-        if args.distributed:
-            train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
-        else:
-            train_sampler = None
+        #if args.distributed:
+        #    train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
+        #else:
+        #    train_sampler = None
+        train_sampler = None
 
-        train_loader = torch.utils.data.DataLoader(
-            train_dataset, batch_size=args.batch_size, shuffle=(train_sampler is None),
-            num_workers=args.workers, pin_memory=True, sampler=train_sampler)
+        #train_loader = torch.utils.data.DataLoader(
+        #    train_dataset, batch_size=args.batch_size, shuffle=(train_sampler is None),
+        #    num_workers=args.workers, pin_memory=True, sampler=train_sampler)
 
         val_loader = torch.utils.data.DataLoader(
             datasets.ImageFolder(valdir, transforms.Compose([
@@ -377,7 +379,7 @@ def validate(val_loader, model, criterion, args):
     top1 = AverageMeter('Acc@1', ':6.2f')
     top5 = AverageMeter('Acc@5', ':6.2f')
     if args.dummy:
-        number_iter = 300
+        number_iter = 30
     else:
         number_iter = len(val_loader)
     if args.calibration:
@@ -428,24 +430,37 @@ def validate(val_loader, model, criterion, args):
                 conf = ipex.AmpConf(torch.int8, args.configure_dir)
                 print("running int8 evalation step\n")
             else:
-                conf = ipex.AmpConf(None)
+                #conf = ipex.AmpConf(None)
+                conf = ipex.AmpConf(torch.bfloat16)
                 print("running fp32 evalation step\n")
         if args.dummy:
             if args.ipex:
                 with torch.no_grad():
+                    print("LeslieDebug: IPEX throughput")
                     for i in range(number_iter):
                         images = torch.randn(args.batch_size, 3, 224, 224).to(device = ipex.DEVICE)
                         target = torch.arange(1, args.batch_size + 1).long().to(device = ipex.DEVICE)
                         with ipex.AutoMixPrecision(conf, running_mode="inference"):
+                        #with torch.cuda.amp.autocast(enabled=True):
                             if i >= args.warmup_iterations:
                                 end = time.time()
                             # compute output
+                            #if i == 11:
+                            #    with torch.autograd.profiler.profile(use_cuda=False, record_shapes=True) as prof:
+                            #        output = model(images)
+                            #    print(prof.key_averages().table(sort_by="self_cpu_time_total"))
+                            #else:
+                            #    output = model(images)
+
                             output = model(images)
+                            
                             if i >= args.warmup_iterations:
                                 batch_time.update(time.time() - end)
 
                             #print(output)
                             loss = criterion(output, target)
+
+                            print("LeslieDebug: Finish one step")
 
                             # measure accuracy and record loss
                             acc1, acc5 = accuracy(output, target, topk=(1, 5))
@@ -458,6 +473,12 @@ def validate(val_loader, model, criterion, args):
                                 progress.display(i)
             else:
                 with torch.no_grad():
+                    print("LeslieDebug: TORCH throughput")
+
+                    #from torch.utils import mkldnn as mkldnn_utils
+                    #model = mkldnn_utils.to_mkldnn(model)
+                    #print(model)
+                    
                     for i in range(number_iter):
                         images = torch.randn(args.batch_size, 3, 224, 224)
                         target = torch.arange(1, args.batch_size + 1).long()
@@ -466,17 +487,42 @@ def validate(val_loader, model, criterion, args):
                         if args.cuda:
                             target = target.cuda(args.gpu, non_blocking=True)
 
+                        #images = images.to(torch.bfloat16).to_mkldnn()
+
                         if i >= args.warmup_iterations:
                             end = time.time()
                         # compute output
-                        output = model(images)
-                        if i >= args.warmup_iterations:
-                            batch_time.update(time.time() - end)
+                        with torch.cuda.amp.autocast(enabled=True):
+
+                            #if i == 11:
+                            #    with torch.autograd.profiler.profile(use_cuda=False, record_shapes=True) as prof:
+                            #        output = model(images)
+                            #    print(prof.key_averages().table(sort_by="self_cpu_time_total"))
+                            #    prof.export_chrome_trace("torch_throughput.json")
+                            #else:
+                            #   output = model(images) 
+
+                            output = model(images)
+                            #output = output.to()
+                            if i >= args.warmup_iterations:
+                              batch_time.update(time.time() - end)
+                            loss = criterion(output, target)
+
+                            #output = output.to(torch.float32)
+                            #print(output)
+                            #output = output.to()
+                        #output = model(images)
+                        #if i >= args.warmup_iterations:
+                        #    batch_time.update(time.time() - end)
 
                         #print(output)
-                        loss = criterion(output, target)
+                        #output = output.to_dense()
+                        #loss = criterion(output, target)
+
+                        #loss = loss.to_dense()
 
                         # measure accuracy and record loss
+                        print("LeslieDebug: Finish one step")
                         acc1, acc5 = accuracy(output, target, topk=(1, 5))
                         losses.update(loss.item(), images.size(0))
                         top1.update(acc1[0], images.size(0))
@@ -487,6 +533,7 @@ def validate(val_loader, model, criterion, args):
         else:
             if args.ipex:
                 with torch.no_grad():
+                    print("LeslieDebug: IPEX accuracy")
                     for i, (images, target) in enumerate(val_loader):
                         with ipex.AutoMixPrecision(conf, running_mode="inference"):
                             images = images.to(device = ipex.DEVICE)
@@ -513,6 +560,7 @@ def validate(val_loader, model, criterion, args):
             else:
                 with torch.no_grad():
                     end = time.time()
+                    print("LeslieDebug: TORCH accuracy")
                     for i, (images, target) in enumerate(val_loader):
                         if args.gpu is not None and args.cuda:
                             images = images.cuda(args.gpu, non_blocking=True)
@@ -522,11 +570,20 @@ def validate(val_loader, model, criterion, args):
                         if i >= args.warmup_iterations:
                             end = time.time()
                         # compute output
-                        output = model(images)
-                        if i >= args.warmup_iterations:
-                            batch_time.update(time.time() - end)
-                        loss = criterion(output, target)
+                        #output = model(images)
+                        #print(output)
+                        #if i >= args.warmup_iterations:
+                        #    batch_time.update(time.time() - end)
+                        #loss = criterion(output, target)
 
+                        with torch.cuda.amp.autocast(enabled=True):
+                            output = model(images)
+                            #print(output)
+                            if i >= args.warmup_iterations:
+                                batch_time.update(time.time() - end)
+                            loss = criterion(output, target)
+                            #output = output.to(torch.float32)
+                        
                         # measure accuracy and record loss
                         acc1, acc5 = accuracy(output, target, topk=(1, 5))
                         losses.update(loss.item(), images.size(0))
