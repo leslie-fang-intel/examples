@@ -14,7 +14,7 @@ import torch.optim
 import torch.multiprocessing as mp
 import torch.utils.data
 import torch.utils.data.distributed
-#import intel_pytorch_extension as ipex
+import intel_pytorch_extension as ipex
 #import _torch_ipex as core
 
 import torchvision.transforms as transforms
@@ -107,10 +107,12 @@ def main():
     print(args)
     if args.ipex:
         import intel_pytorch_extension as ipex
-        if args.dnnl:
-            ipex.core.enable_auto_dnnl()
-        else:
-            ipex.core.disable_auto_dnnl()
+
+    if args.dnnl:
+        ipex.core.enable_auto_dnnl()
+    else:
+        import intel_pytorch_extension as ipex
+        ipex.core.disable_auto_dnnl()
 
     if args.seed is not None:
         random.seed(args.seed)
@@ -148,9 +150,6 @@ def main():
 def main_worker(gpu, ngpus_per_node, args):
     global best_acc1
     args.gpu = gpu
-
-    if args.ipex:
-        import intel_pytorch_extension as ipex
         
     if args.gpu is not None:
         print("Use GPU: {} for training".format(args.gpu))
@@ -378,8 +377,6 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
 
 
 def validate(val_loader, model, criterion, args):
-    if args.ipex:
-       import intel_pytorch_extension as ipex 
     batch_time = AverageMeter('Time', ':6.3f')
     losses = AverageMeter('Loss', ':.4e')
     top1 = AverageMeter('Acc@1', ':6.2f')
@@ -520,6 +517,8 @@ def validate(val_loader, model, criterion, args):
                             loss = criterion(output, target)
 
                         # measure accuracy and record loss
+                        output = output.to_dense().to(torch.float)
+                        
                         print("LeslieDebug: Finish one step")
                         acc1, acc5 = accuracy(output, target, topk=(1, 5))
                         losses.update(loss.item(), images.size(0))
@@ -590,6 +589,8 @@ def validate(val_loader, model, criterion, args):
                             #output = output.to(torch.float32)
                         
                         # measure accuracy and record loss
+                        output = output.to_dense().to(torch.float)
+                        
                         acc1, acc5 = accuracy(output, target, topk=(1, 5))
                         losses.update(loss.item(), images.size(0))
                         top1.update(acc1[0], images.size(0))
