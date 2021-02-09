@@ -110,7 +110,7 @@ def main():
 
     if args.dnnl:
         ipex.core.enable_auto_dnnl()
-    else:
+    elif args.ipex:
         import intel_pytorch_extension as ipex
         ipex.core.disable_auto_dnnl()
 
@@ -495,7 +495,7 @@ def validate(val_loader, model, criterion, args):
                             end = time.time()
                         # compute output
                         if args.autocast:
-                            with torch.cuda.amp.autocast(enabled=True):
+                            with torch.cuda.amp.autocast(enabled=True, dtype="BFLOAT16", layout="MKLDNN"):
                                 #if i == 11:
                                 #    with torch.autograd.profiler.profile(use_cuda=False, record_shapes=True) as prof:
                                 #        output = model(images)
@@ -508,6 +508,7 @@ def validate(val_loader, model, criterion, args):
                                 if i >= args.warmup_iterations:
                                   batch_time.update(time.time() - end)
                                 loss = criterion(output, target)
+                            output = output.to_dense().to(torch.float)
                         else:
                             output = model(images)
                             if i >= args.warmup_iterations:
@@ -517,7 +518,8 @@ def validate(val_loader, model, criterion, args):
                             loss = criterion(output, target)
 
                         # measure accuracy and record loss
-                        output = output.to_dense().to(torch.float)
+                        #if(output.is_mkldnn())
+                        #output = output.to_dense().to(torch.float)
                         
                         print("LeslieDebug: Finish one step")
                         acc1, acc5 = accuracy(output, target, topk=(1, 5))
@@ -574,12 +576,13 @@ def validate(val_loader, model, criterion, args):
                         #loss = criterion(output, target)
 
                         if args.autocast:
-                            with torch.cuda.amp.autocast(enabled=True):
+                            with torch.cuda.amp.autocast(enabled=True, dtype="BFLOAT16", layout="MKLDNN"):
                                 output = model(images)
                                 #print(output)
                                 if i >= args.warmup_iterations:
                                     batch_time.update(time.time() - end)
                                 loss = criterion(output, target)
+                            output = output.to_dense().to(torch.float)
                         else:
                             output = model(images)
                             #print(output)
@@ -589,7 +592,7 @@ def validate(val_loader, model, criterion, args):
                             #output = output.to(torch.float32)
                         
                         # measure accuracy and record loss
-                        output = output.to_dense().to(torch.float)
+                        
                         
                         acc1, acc5 = accuracy(output, target, topk=(1, 5))
                         losses.update(loss.item(), images.size(0))
