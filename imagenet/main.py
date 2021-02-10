@@ -495,7 +495,7 @@ def validate(val_loader, model, criterion, args):
                             end = time.time()
                         # compute output
                         if args.autocast:
-                            with torch.cuda.amp.autocast(enabled=True, dtype="BFLOAT16", layout="MKLDNN"):
+                            with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout="MKLDNN"):
                                 #if i == 11:
                                 #    with torch.autograd.profiler.profile(use_cuda=False, record_shapes=True) as prof:
                                 #        output = model(images)
@@ -576,7 +576,7 @@ def validate(val_loader, model, criterion, args):
                         #loss = criterion(output, target)
 
                         if args.autocast:
-                            with torch.cuda.amp.autocast(enabled=True, dtype="BFLOAT16", layout="MKLDNN"):
+                            with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout="MKLDNN"):
                                 output = model(images)
                                 #print(output)
                                 if i >= args.warmup_iterations:
