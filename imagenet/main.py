@@ -295,7 +295,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
         # compute output
         if args.autocast:
             #print("---------------------------LeslieDebug: autocsat training------------------")
-            with torch.cuda.amp.autocast(enabled=True, dtype="BFLOAT16", layout="MKLDNN"):
+            with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout="MKLDNN"):
                 output = model(images)
                 loss = criterion(output, target)
             output = output.to_dense().to(torch.float32)
@@ -345,7 +345,7 @@ def validate(val_loader, model, criterion, args):
 
             # compute output
             if args.autocast:
-                with torch.cuda.amp.autocast(enabled=True):
+                with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout="MKLDNN"):
                     output = model(images)
                     loss = criterion(output, target)
             else:
