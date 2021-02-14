@@ -345,7 +345,7 @@ def validate(val_loader, model, criterion, args):
 
             # compute output
             if args.autocast:
-                with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout="MKLDNN"):
+                with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, device=torch.device('mkldnn')):
                     output = model(images)
                     loss = criterion(output, target)
             else:
