@@ -344,6 +344,11 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
     model.train()
 
     end = time.time()
+
+    #conf = ipex.AmpConf(torch.bfloat16) if args.ipex else None
+    if args.ipex:
+        ipex.enable_auto_mixed_precision(mixed_dtype = torch.bfloat16)
+
     for i, (images, target) in enumerate(train_loader):
         # measure data loading time
         data_time.update(time.time() - end)
@@ -359,9 +364,15 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
                 output = model(images)
                 loss = criterion(output, target)
             output = output.to_dense().to(torch.float32)
-        else:
-            output = model(images)
-            loss = criterion(output, target)
+        elif args.ipex:
+            images = images.to(device = ipex.DEVICE)
+        #    with ipex.AutoMixPrecision(conf):
+        #        images = images.to(device = ipex.DEVICE)
+        #        output = model(images)
+        #        loss = criterion(output, target)
+        #else:
+        output = model(images)
+        loss = criterion(output, target)
 
         # measure accuracy and record loss
         acc1, acc5 = accuracy(output, target, topk=(1, 5))
