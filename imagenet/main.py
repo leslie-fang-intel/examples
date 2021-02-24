@@ -492,6 +492,13 @@ def validate(val_loader, model, criterion, args):
 
                     if args.autocast:
                         print("LeslieDebug: Enable autocast")
+                        #import time
+                        #time.sleep(15)
+                        #pretransfer to mkldnn layout to reduce weights reorder. The weights after reorder will be cached.
+                        #from torch.utils import mkldnn as mkldnn_utils
+                        #model = mkldnn_utils.to_mkldnn(model, torch.bfloat16)
+                        #print(model)
+
                         with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, device=torch.device('mkldnn')):
                             for i in range(number_iter):
                                 images = torch.randn(args.batch_size, 3, 224, 224)
@@ -521,10 +528,10 @@ def validate(val_loader, model, criterion, args):
                                     progress.display(i)
 
                     else:
-                        #from torch.utils import mkldnn as mkldnn_utils
-                        #model = mkldnn_utils.to_mkldnn(model)
                         #print(model)
                         print("LeslieDebug: Run without autocast")
+                        from torch.utils import mkldnn as mkldnn_utils
+                        model = mkldnn_utils.to_mkldnn(model, torch.bfloat16)
 
                         for i in range(number_iter):
                             images = torch.randn(args.batch_size, 3, 224, 224)
@@ -534,7 +541,7 @@ def validate(val_loader, model, criterion, args):
                             if args.cuda:
                                 target = target.cuda(args.gpu, non_blocking=True)
 
-                            #images = images.to(torch.bfloat16).to_mkldnn()
+                            images = images.to(torch.bfloat16).to_mkldnn()
 
                             if i >= args.warmup_iterations:
                                 end = time.time()
@@ -544,11 +551,12 @@ def validate(val_loader, model, criterion, args):
                                 batch_time.update(time.time() - end)
 
                             #output = output.to_dense()
+                            #if output.is_mkldnn():
+                            output = output.to_dense().to(torch.float)
                             loss = criterion(output, target)
 
                             # measure accuracy and record loss
                             #if(output.is_mkldnn())
-                            #output = output.to_dense().to(torch.float)
 
                             print("LeslieDebug: Finish one step")
                             acc1, acc5 = accuracy(output, target, topk=(1, 5))
@@ -566,7 +574,7 @@ def validate(val_loader, model, criterion, args):
                         with ipex.AutoMixPrecision(conf, running_mode="inference"):
                             images = images.to(device = ipex.DEVICE)
                             target = target.to(device = ipex.DEVICE)
-                            # compute output
+
                             if i >= args.warmup_iterations:
                                 end = time.time()
                             # compute output
@@ -594,6 +602,9 @@ def validate(val_loader, model, criterion, args):
                         print("LeslieDebug: Enable autocast")
                         with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, device=torch.device('mkldnn')):
                             for i, (images, target) in enumerate(val_loader):
+                                # for the comparsion with auto-mix
+                                # better performance to rule out the image reorder time in autocast
+                                # images = images.to_mkldnn(torch.bfloat16)
                                 # compute output
                                 if i >= args.warmup_iterations:
                                     end = time.time()
