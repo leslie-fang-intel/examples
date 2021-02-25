@@ -111,7 +111,7 @@ def main():
     if args.dnnl:
         ipex.core.enable_auto_dnnl()
     elif args.ipex:
-        import intel_pytorch_extension as ipex
+        #import intel_pytorch_extension as ipex
         ipex.core.disable_auto_dnnl()
 
     if args.seed is not None:
@@ -347,7 +347,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
 
     #conf = ipex.AmpConf(torch.bfloat16) if args.ipex else None
     if args.ipex:
-        ipex.enable_auto_mixed_precision(mixed_dtype = torch.bfloat16)
+        ipex.enable_auto_mixed_precision(mixed_dtype = torch.bfloat16, train = True)
 
     for i, (images, target) in enumerate(train_loader):
         # measure data loading time
@@ -358,6 +358,10 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
         if torch.cuda.is_available():
             target = target.cuda(args.gpu, non_blocking=True)
 
+        if args.ipex:
+            images = images.to(device = ipex.DEVICE)
+            target = target.to(device = ipex.DEVICE)
+
         # compute output
         if args.autocast:
             with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, device=torch.device('mkldnn')):
@@ -365,9 +369,9 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
                 loss = criterion(output, target)
             output = output.to_dense().to(torch.float32)
         else:
-            if args.ipex:
-                images = images.to(device = ipex.DEVICE)
             output = model(images)
+            #output = output.to(torch.float32)
+            #print("test------------------")
             loss = criterion(output, target)
 
         # measure accuracy and record loss
@@ -460,14 +464,14 @@ def validate(val_loader, model, criterion, args):
                             if i >= args.warmup_iterations:
                                 end = time.time()
                             # compute output
-                            #if i == 11:
-                            #    with torch.autograd.profiler.profile(use_cuda=False, record_shapes=True) as prof:
-                            #        output = model(images)
-                            #    print(prof.key_averages().table(sort_by="self_cpu_time_total"))
-                            #else:
-                            #    output = model(images)
+                            if i == 100:
+                                with torch.autograd.profiler.profile(use_cuda=False, record_shapes=True) as prof:
+                                    output = model(images)
+                                print(prof.key_averages().table(sort_by="self_cpu_time_total"))
+                            else:
+                                output = model(images)
 
-                            output = model(images)
+                            #output = model(images)
                             
                             if i >= args.warmup_iterations:
                                 batch_time.update(time.time() - end)
@@ -498,22 +502,21 @@ def validate(val_loader, model, criterion, args):
                         #from torch.utils import mkldnn as mkldnn_utils
                         #model = mkldnn_utils.to_mkldnn(model, torch.bfloat16)
                         #print(model)
-
                         with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, device=torch.device('mkldnn')):
                             for i in range(number_iter):
                                 images = torch.randn(args.batch_size, 3, 224, 224)
                                 target = torch.arange(1, args.batch_size + 1).long()
                                 if i >= args.warmup_iterations:
                                     end = time.time()
-                                #if i == 100:
-                                #    # profiling
-                                #    with torch.autograd.profiler.profile(use_cuda=False, record_shapes=True) as prof:
-                                #        output = model(images)
-                                #    print(prof.key_averages().table(sort_by="self_cpu_time_total"))
-                                #    prof.export_chrome_trace("torch_throughput.json")
-                                #else:
-                                #    output = model(images)
-                                output = model(images)
+                                if i == 100:
+                                    # profiling
+                                    with torch.autograd.profiler.profile(use_cuda=False, record_shapes=True) as prof:
+                                        output = model(images)
+                                    print(prof.key_averages().table(sort_by="self_cpu_time_total"))
+                                    prof.export_chrome_trace("torch_throughput.json")
+                                else:
+                                    output = model(images)
+                                #output = model(images)
                                 if i >= args.warmup_iterations:
                                     batch_time.update(time.time() - end)
                                 loss = criterion(output, target)
