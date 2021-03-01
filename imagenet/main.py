@@ -364,7 +364,7 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
 
         # compute output
         if args.autocast:
-            with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, device=torch.device('mkldnn')):
+            with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout=torch._mkldnn):
                 output = model(images)
                 loss = criterion(output, target)
             output = output.to_dense().to(torch.float32)
@@ -502,7 +502,7 @@ def validate(val_loader, model, criterion, args):
                         #from torch.utils import mkldnn as mkldnn_utils
                         #model = mkldnn_utils.to_mkldnn(model, torch.bfloat16)
                         #print(model)
-                        with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, device=torch.device('mkldnn')):
+                        with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout = torch._mkldnn):
                             for i in range(number_iter):
                                 images = torch.randn(args.batch_size, 3, 224, 224)
                                 target = torch.arange(1, args.batch_size + 1).long()
@@ -603,7 +603,7 @@ def validate(val_loader, model, criterion, args):
 
                     if args.autocast:
                         print("LeslieDebug: Enable autocast")
-                        with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, device=torch.device('mkldnn')):
+                        with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout = torch._mkldnn):
                             for i, (images, target) in enumerate(val_loader):
                                 # for the comparsion with auto-mix
                                 # better performance to rule out the image reorder time in autocast
