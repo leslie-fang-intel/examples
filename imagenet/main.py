@@ -496,19 +496,36 @@ def validate(val_loader, model, criterion, args):
 
                     if args.autocast:
                         print("LeslieDebug: Enable autocast")
+
+                        #print(torch._mkldnn)
+                        #current_target_layout = ipex.amp.get_target_layout()
+                        #print(current_target_layout)
+                        #ipex.amp.set_target_layout(torch._mkldnn)
+                        #current_target_layout = ipex.amp.get_target_layout()
+                        #print(current_target_layout)
+                        #ipex.amp.set_target_layout(current_target_layout)
+                        #current_target_layout = ipex.amp.get_target_layout()
+                        #print(current_target_layout)
+                        #return 
+
                         #import time
                         #time.sleep(15)
                         #pretransfer to mkldnn layout to reduce weights reorder. The weights after reorder will be cached.
                         #from torch.utils import mkldnn as mkldnn_utils
                         #model = mkldnn_utils.to_mkldnn(model, torch.bfloat16)
                         #print(model)
-                        with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, device=torch.device('mkldnn')):
+                        with ipex.amp.autocast(enabled=True, dtype=torch.bfloat16):
+                        #with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, device=torch.device('mkldnn')):
+                            #number_iter = 5
                             for i in range(number_iter):
+                                #with ipex.amp.autocast(enabled=True, dtype=torch.float32, layout=torch.strided):
+                                #    images = torch.randn(args.batch_size, 3, 224, 224)
+                                #    target = torch.arange(1, args.batch_size + 1).long()
                                 images = torch.randn(args.batch_size, 3, 224, 224)
                                 target = torch.arange(1, args.batch_size + 1).long()
                                 if i >= args.warmup_iterations:
                                     end = time.time()
-                                if i == 100:
+                                if i == 12:
                                     # profiling
                                     with torch.autograd.profiler.profile(use_cuda=False, record_shapes=True) as prof:
                                         output = model(images)
@@ -520,7 +537,9 @@ def validate(val_loader, model, criterion, args):
                                 if i >= args.warmup_iterations:
                                     batch_time.update(time.time() - end)
                                 loss = criterion(output, target)
-                                output = output.to_dense().to(torch.float)
+
+                                #output = output.to_dense().to(torch.float)
+
                                 print("LeslieDebug: Finish one step")
                                 acc1, acc5 = accuracy(output, target, topk=(1, 5))
                                 losses.update(loss.item(), images.size(0))
