@@ -298,8 +298,14 @@ def main_worker(gpu, ngpus_per_node, args):
             script_model = torch.jit.script(model)
 
         if args.jit:
+            #print(script_model)
+            #return
+            #from torch.jit._recursive import wrap_cpp_module
+            #script_model = wrap_cpp_module(torch._C._jit_pass_fold_convbn(script_model._c))
             validate(val_loader, script_model, criterion, args)
         else:
+            #print(model)
+            #return
             validate(val_loader, model, criterion, args)
         return
 
@@ -498,10 +504,22 @@ def validate(val_loader, model, criterion, args):
                         print("LeslieDebug: Enable autocast")
                         #import time
                         #time.sleep(15)
+                        
                         #pretransfer to mkldnn layout to reduce weights reorder. The weights after reorder will be cached.
                         #from torch.utils import mkldnn as mkldnn_utils
                         #model = mkldnn_utils.to_mkldnn(model, torch.bfloat16)
                         #print(model)
+                        #return
+
+                        #Test jit mode
+                        #test_images = torch.randn(args.batch_size, 3, 224, 224)
+                        #with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout = torch._mkldnn):
+                        #    traced_model = torch.jit.trace(model, test_images)
+                        #model = traced_model
+                        #y = traced_model(images)
+                        #print(traced_model.graph_for(images))
+                        #return
+
                         with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout = torch._mkldnn):
                             for i in range(number_iter):
                                 images = torch.randn(args.batch_size, 3, 224, 224)
@@ -519,6 +537,8 @@ def validate(val_loader, model, criterion, args):
                                 #output = model(images)
                                 if i >= args.warmup_iterations:
                                     batch_time.update(time.time() - end)
+                                
+                                #output = output.to_dense().to(torch.float)
                                 loss = criterion(output, target)
                                 output = output.to_dense().to(torch.float)
                                 print("LeslieDebug: Finish one step")
@@ -600,21 +620,32 @@ def validate(val_loader, model, criterion, args):
                 with torch.no_grad():
                     end = time.time()
                     print("LeslieDebug: TORCH accuracy")
-
+                    
                     if args.autocast:
                         print("LeslieDebug: Enable autocast")
+
+                        #print(model.graph_for(test_images))
+                        #test_images = torch.randn(args.batch_size, 3, 224, 224)
+                        #with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout = torch._mkldnn):
+                        #    traced_model = torch.jit.trace(model, test_images)
+                        #model = traced_model
+                        #print(model.graph_for(test_images))
+                        #return 
+
                         with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout = torch._mkldnn):
                             for i, (images, target) in enumerate(val_loader):
                                 # for the comparsion with auto-mix
                                 # better performance to rule out the image reorder time in autocast
                                 # images = images.to_mkldnn(torch.bfloat16)
                                 # compute output
+                                #print(model)
                                 if i >= args.warmup_iterations:
                                     end = time.time()
                                 output = model(images)
                                 #print(output)
                                 if i >= args.warmup_iterations:
                                     batch_time.update(time.time() - end)
+                                #output = output.to_dense().to(torch.float)
                                 loss = criterion(output, target)
                                 output = output.to_dense().to(torch.float)
                                 acc1, acc5 = accuracy(output, target, topk=(1, 5))
