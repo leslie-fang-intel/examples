@@ -15,7 +15,7 @@ import torch.multiprocessing as mp
 import torch.utils.data
 import torch.utils.data.distributed
 import intel_pytorch_extension as ipex
-import _torch_ipex as core
+#import _torch_ipex as core
 
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
@@ -95,6 +95,8 @@ parser.add_argument("--dummy", action='store_true',
                     help="using  dummu data to test the performance of inference")
 parser.add_argument('-w', '--warmup-iterations', default=30, type=int, metavar='N',
                     help='number of warmup iterati ons to run')
+parser.add_argument('--autocast', action='store_true', default=False,
+                    help='enable autocast CPU in torch')
 
 best_acc1 = 0
 
@@ -105,9 +107,11 @@ def main():
     print(args)
     if args.ipex:
         import intel_pytorch_extension as ipex
+
     if args.dnnl:
         ipex.core.enable_auto_dnnl()
-    else:
+    elif args.ipex:
+        #import intel_pytorch_extension as ipex
         ipex.core.disable_auto_dnnl()
 
     if args.seed is not None:
@@ -146,7 +150,7 @@ def main():
 def main_worker(gpu, ngpus_per_node, args):
     global best_acc1
     args.gpu = gpu
-
+        
     if args.gpu is not None:
         print("Use GPU: {} for training".format(args.gpu))
 
@@ -266,6 +270,7 @@ def main_worker(gpu, ngpus_per_node, args):
             train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
         else:
             train_sampler = None
+        #train_sampler = None
 
         train_loader = torch.utils.data.DataLoader(
             train_dataset, batch_size=args.batch_size, shuffle=(train_sampler is None),
@@ -293,8 +298,14 @@ def main_worker(gpu, ngpus_per_node, args):
             script_model = torch.jit.script(model)
 
         if args.jit:
+            #print(script_model)
+            #return
+            #from torch.jit._recursive import wrap_cpp_module
+            #script_model = wrap_cpp_module(torch._C._jit_pass_fold_convbn(script_model._c))
             validate(val_loader, script_model, criterion, args)
         else:
+            #print(model)
+            #return
             validate(val_loader, model, criterion, args)
         return
 
@@ -339,6 +350,11 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
     model.train()
 
     end = time.time()
+
+    #conf = ipex.AmpConf(torch.bfloat16) if args.ipex else None
+    if args.ipex:
+        ipex.enable_auto_mixed_precision(mixed_dtype = torch.bfloat16, train = True)
+
     for i, (images, target) in enumerate(train_loader):
         # measure data loading time
         data_time.update(time.time() - end)
@@ -348,9 +364,21 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
         if torch.cuda.is_available():
             target = target.cuda(args.gpu, non_blocking=True)
 
+        if args.ipex:
+            images = images.to(device = ipex.DEVICE)
+            target = target.to(device = ipex.DEVICE)
+
         # compute output
-        output = model(images)
-        loss = criterion(output, target)
+        if args.autocast:
+            with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout=torch._mkldnn):
+                output = model(images)
+                loss = criterion(output, target)
+            output = output.to_dense().to(torch.float32)
+        else:
+            output = model(images)
+            #output = output.to(torch.float32)
+            #print("test------------------")
+            loss = criterion(output, target)
 
         # measure accuracy and record loss
         acc1, acc5 = accuracy(output, target, topk=(1, 5))
@@ -428,11 +456,13 @@ def validate(val_loader, model, criterion, args):
                 conf = ipex.AmpConf(torch.int8, args.configure_dir)
                 print("running int8 evalation step\n")
             else:
-                conf = ipex.AmpConf(None)
+                #conf = ipex.AmpConf(None)
+                conf = ipex.AmpConf(torch.bfloat16)
                 print("running fp32 evalation step\n")
         if args.dummy:
             if args.ipex:
                 with torch.no_grad():
+                    print("LeslieDebug: IPEX throughput")
                     for i in range(number_iter):
                         images = torch.randn(args.batch_size, 3, 224, 224).to(device = ipex.DEVICE)
                         target = torch.arange(1, args.batch_size + 1).long().to(device = ipex.DEVICE)
@@ -440,12 +470,22 @@ def validate(val_loader, model, criterion, args):
                             if i >= args.warmup_iterations:
                                 end = time.time()
                             # compute output
-                            output = model(images)
+                            if i == 100:
+                                with torch.autograd.profiler.profile(use_cuda=False, record_shapes=True) as prof:
+                                    output = model(images)
+                                print(prof.key_averages().table(sort_by="self_cpu_time_total"))
+                            else:
+                                output = model(images)
+
+                            #output = model(images)
+                            
                             if i >= args.warmup_iterations:
                                 batch_time.update(time.time() - end)
 
                             #print(output)
                             loss = criterion(output, target)
+
+                            print("LeslieDebug: Finish one step")
 
                             # measure accuracy and record loss
                             acc1, acc5 = accuracy(output, target, topk=(1, 5))
@@ -458,40 +498,106 @@ def validate(val_loader, model, criterion, args):
                                 progress.display(i)
             else:
                 with torch.no_grad():
-                    for i in range(number_iter):
-                        images = torch.randn(args.batch_size, 3, 224, 224)
-                        target = torch.arange(1, args.batch_size + 1).long()
-                        if args.gpu is not None and args.cuda:
-                            images = images.cuda(args.gpu, non_blocking=True)
-                        if args.cuda:
-                            target = target.cuda(args.gpu, non_blocking=True)
+                    print("LeslieDebug: TORCH throughput")
 
-                        if i >= args.warmup_iterations:
-                            end = time.time()
-                        # compute output
-                        output = model(images)
-                        if i >= args.warmup_iterations:
-                            batch_time.update(time.time() - end)
+                    if args.autocast:
+                        print("LeslieDebug: Enable autocast")
+                        #import time
+                        #time.sleep(15)
+                        
+                        #pretransfer to mkldnn layout to reduce weights reorder. The weights after reorder will be cached.
+                        #from torch.utils import mkldnn as mkldnn_utils
+                        #model = mkldnn_utils.to_mkldnn(model, torch.bfloat16)
+                        #print(model)
+                        #return
 
-                        #print(output)
-                        loss = criterion(output, target)
+                        #Test jit mode
+                        #test_images = torch.randn(args.batch_size, 3, 224, 224)
+                        #with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout = torch._mkldnn):
+                        #    traced_model = torch.jit.trace(model, test_images)
+                        #model = traced_model
+                        #y = traced_model(images)
+                        #print(traced_model.graph_for(images))
+                        #return
 
-                        # measure accuracy and record loss
-                        acc1, acc5 = accuracy(output, target, topk=(1, 5))
-                        losses.update(loss.item(), images.size(0))
-                        top1.update(acc1[0], images.size(0))
-                        top5.update(acc5[0], images.size(0))
+                        with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout = torch._mkldnn):
+                            for i in range(number_iter):
+                                images = torch.randn(args.batch_size, 3, 224, 224)
+                                target = torch.arange(1, args.batch_size + 1).long()
+                                if i >= args.warmup_iterations:
+                                    end = time.time()
+                                if i == 100:
+                                    # profiling
+                                    with torch.autograd.profiler.profile(use_cuda=False, record_shapes=True) as prof:
+                                        output = model(images)
+                                    print(prof.key_averages().table(sort_by="self_cpu_time_total"))
+                                    prof.export_chrome_trace("torch_throughput.json")
+                                else:
+                                    output = model(images)
+                                #output = model(images)
+                                if i >= args.warmup_iterations:
+                                    batch_time.update(time.time() - end)
+                                
+                                #output = output.to_dense().to(torch.float)
+                                loss = criterion(output, target)
+                                output = output.to_dense().to(torch.float)
+                                print("LeslieDebug: Finish one step")
+                                acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                                losses.update(loss.item(), images.size(0))
+                                top1.update(acc1[0], images.size(0))
+                                top5.update(acc5[0], images.size(0))
 
-                        if i % args.print_freq == 0:
-                            progress.display(i)
+                                if i % args.print_freq == 0:
+                                    progress.display(i)
+
+                    else:
+                        #print(model)
+                        print("LeslieDebug: Run without autocast")
+                        from torch.utils import mkldnn as mkldnn_utils
+                        model = mkldnn_utils.to_mkldnn(model, torch.bfloat16)
+
+                        for i in range(number_iter):
+                            images = torch.randn(args.batch_size, 3, 224, 224)
+                            target = torch.arange(1, args.batch_size + 1).long()
+                            if args.gpu is not None and args.cuda:
+                                images = images.cuda(args.gpu, non_blocking=True)
+                            if args.cuda:
+                                target = target.cuda(args.gpu, non_blocking=True)
+
+                            images = images.to(torch.bfloat16).to_mkldnn()
+
+                            if i >= args.warmup_iterations:
+                                end = time.time()
+                            # compute output
+                            output = model(images)
+                            if i >= args.warmup_iterations:
+                                batch_time.update(time.time() - end)
+
+                            #output = output.to_dense()
+                            #if output.is_mkldnn():
+                            output = output.to_dense().to(torch.float)
+                            loss = criterion(output, target)
+
+                            # measure accuracy and record loss
+                            #if(output.is_mkldnn())
+
+                            print("LeslieDebug: Finish one step")
+                            acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                            losses.update(loss.item(), images.size(0))
+                            top1.update(acc1[0], images.size(0))
+                            top5.update(acc5[0], images.size(0))
+
+                            if i % args.print_freq == 0:
+                                progress.display(i)
         else:
             if args.ipex:
                 with torch.no_grad():
+                    print("LeslieDebug: IPEX accuracy")
                     for i, (images, target) in enumerate(val_loader):
                         with ipex.AutoMixPrecision(conf, running_mode="inference"):
                             images = images.to(device = ipex.DEVICE)
                             target = target.to(device = ipex.DEVICE)
-                            # compute output
+
                             if i >= args.warmup_iterations:
                                 end = time.time()
                             # compute output
@@ -513,28 +619,77 @@ def validate(val_loader, model, criterion, args):
             else:
                 with torch.no_grad():
                     end = time.time()
-                    for i, (images, target) in enumerate(val_loader):
-                        if args.gpu is not None and args.cuda:
-                            images = images.cuda(args.gpu, non_blocking=True)
-                        if args.cuda:
-                            target = target.cuda(args.gpu, non_blocking=True)
-                        # compute output
-                        if i >= args.warmup_iterations:
-                            end = time.time()
-                        # compute output
-                        output = model(images)
-                        if i >= args.warmup_iterations:
-                            batch_time.update(time.time() - end)
-                        loss = criterion(output, target)
+                    print("LeslieDebug: TORCH accuracy")
+                    
+                    if args.autocast:
+                        print("LeslieDebug: Enable autocast")
 
-                        # measure accuracy and record loss
-                        acc1, acc5 = accuracy(output, target, topk=(1, 5))
-                        losses.update(loss.item(), images.size(0))
-                        top1.update(acc1[0], images.size(0))
-                        top5.update(acc5[0], images.size(0))
+                        #print(model.graph_for(test_images))
+                        #test_images = torch.randn(args.batch_size, 3, 224, 224)
+                        #with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout = torch._mkldnn):
+                        #    traced_model = torch.jit.trace(model, test_images)
+                        #model = traced_model
+                        #print(model.graph_for(test_images))
+                        #return 
 
-                        if i % args.print_freq == 0:
-                            progress.display(i)
+                        with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout = torch._mkldnn):
+                            for i, (images, target) in enumerate(val_loader):
+                                # for the comparsion with auto-mix
+                                # better performance to rule out the image reorder time in autocast
+                                # images = images.to_mkldnn(torch.bfloat16)
+                                # compute output
+                                #print(model)
+                                if i >= args.warmup_iterations:
+                                    end = time.time()
+                                output = model(images)
+                                #print(output)
+                                if i >= args.warmup_iterations:
+                                    batch_time.update(time.time() - end)
+                                #output = output.to_dense().to(torch.float)
+                                loss = criterion(output, target)
+                                output = output.to_dense().to(torch.float)
+                                acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                                losses.update(loss.item(), images.size(0))
+                                top1.update(acc1[0], images.size(0))
+                                top5.update(acc5[0], images.size(0))
+
+                                if i % args.print_freq == 0:
+                                    progress.display(i)
+                    else:
+                        print("LeslieDebug: Run without autocast")
+                        
+                        for i, (images, target) in enumerate(val_loader):
+                            if args.gpu is not None and args.cuda:
+                                images = images.cuda(args.gpu, non_blocking=True)
+                            if args.cuda:
+                                target = target.cuda(args.gpu, non_blocking=True)
+                            # compute output
+                            if i >= args.warmup_iterations:
+                                end = time.time()
+                            # compute output
+                            #output = model(images)
+                            #print(output)
+                            #if i >= args.warmup_iterations:
+                            #    batch_time.update(time.time() - end)
+                            #loss = criterion(output, target)
+
+                            output = model(images)
+                            #print(output)
+                            if i >= args.warmup_iterations:
+                                batch_time.update(time.time() - end)
+                            loss = criterion(output, target)
+                            #output = output.to(torch.float32)
+                        
+                            # measure accuracy and record loss
+                        
+                        
+                            acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                            losses.update(loss.item(), images.size(0))
+                            top1.update(acc1[0], images.size(0))
+                            top5.update(acc5[0], images.size(0))
+
+                            if i % args.print_freq == 0:
+                                progress.display(i)
 
         batch_size = args.batch_size
         latency = batch_time.avg / batch_size * 1000
