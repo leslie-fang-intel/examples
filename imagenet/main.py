@@ -298,6 +298,8 @@ def main_worker(gpu, ngpus_per_node, args):
             script_model = torch.jit.script(model)
 
         if args.jit:
+            #print(script_model)
+            #return
             validate(val_loader, script_model, criterion, args)
         else:
             validate(val_loader, model, criterion, args)
@@ -457,6 +459,9 @@ def validate(val_loader, model, criterion, args):
             if args.ipex:
                 with torch.no_grad():
                     print("LeslieDebug: IPEX throughput")
+                    #print(model)
+                    #return
+                    
                     for i in range(number_iter):
                         images = torch.randn(args.batch_size, 3, 224, 224).to(device = ipex.DEVICE)
                         target = torch.arange(1, args.batch_size + 1).long().to(device = ipex.DEVICE)
@@ -514,9 +519,60 @@ def validate(val_loader, model, criterion, args):
                         #from torch.utils import mkldnn as mkldnn_utils
                         #model = mkldnn_utils.to_mkldnn(model, torch.bfloat16)
                         #print(model)
-                        with ipex.amp.autocast(enabled=True, dtype=torch.bfloat16):
+                        
+                        enable_jit = False
+                        # Test the trace 
+                        if enable_jit:
+                            images = torch.randn(args.batch_size, 3, 224, 224)
+                            #ipex.core.disable_jit_opt()
+                            with ipex.amp.autocast(enabled=True, configure=ipex.conf.AmpConf(torch.bfloat16)):
+                                print("Generate JIT trace")
+                            #    import pdb
+                            #    pdb.set_trace()
+                                traced_model = torch.jit.trace(model, images)
+                            #y = traced_model(images)
+                            #print(traced_model.graph_for(images))
+                            model = traced_model
+                            print(model.graph_for(images))
+                            for i in range(number_iter):
+                                #with ipex.amp.autocast(enabled=True, dtype=torch.float32, layout=torch.strided):
+                                #    images = torch.randn(args.batch_size, 3, 224, 224)
+                                #    target = torch.arange(1, args.batch_size + 1).long()
+                                images = torch.randn(args.batch_size, 3, 224, 224)
+                                target = torch.arange(1, args.batch_size + 1).long()
+                                if i >= args.warmup_iterations:
+                                    end = time.time()
+                                if i == 12:
+                                    # profiling
+                                    with torch.autograd.profiler.profile(use_cuda=False, record_shapes=True) as prof:
+                                        output = model(images)
+                                    print(prof.key_averages().table(sort_by="self_cpu_time_total"))
+                                    prof.export_chrome_trace("torch_throughput.json")
+                                else:
+                                    output = model(images)
+                                output = output.to(torch.float)
+                                #print(output)
+                                #print(target)
+                                if i >= args.warmup_iterations:
+                                    batch_time.update(time.time() - end)
+                                loss = criterion(output, target)
+
+                                print("LeslieDebug: Finish one step")
+                                acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                                losses.update(loss.item(), images.size(0))
+                                top1.update(acc1[0], images.size(0))
+                                top5.update(acc5[0], images.size(0))
+
+                                if i % args.print_freq == 0:
+                                    progress.display(i)
+                            return
+                        #return
+                        
+                        with ipex.amp.autocast(enabled=True, configure=ipex.conf.AmpConf(torch.bfloat16)):
                         #with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, device=torch.device('mkldnn')):
                             #number_iter = 5
+                            #print(model)
+                            #return
                             for i in range(number_iter):
                                 #with ipex.amp.autocast(enabled=True, dtype=torch.float32, layout=torch.strided):
                                 #    images = torch.randn(args.batch_size, 3, 224, 224)
@@ -622,7 +678,7 @@ def validate(val_loader, model, criterion, args):
 
                     if args.autocast:
                         print("LeslieDebug: Enable autocast")
-                        with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, device=torch.device('mkldnn')):
+                        with ipex.amp.autocast(enabled=True, dtype=torch.bfloat16):
                             for i, (images, target) in enumerate(val_loader):
                                 # for the comparsion with auto-mix
                                 # better performance to rule out the image reorder time in autocast
@@ -635,7 +691,7 @@ def validate(val_loader, model, criterion, args):
                                 if i >= args.warmup_iterations:
                                     batch_time.update(time.time() - end)
                                 loss = criterion(output, target)
-                                output = output.to_dense().to(torch.float)
+                                #output = output.to_dense().to(torch.float)
                                 acc1, acc5 = accuracy(output, target, topk=(1, 5))
                                 losses.update(loss.item(), images.size(0))
                                 top1.update(acc1[0], images.size(0))
