@@ -603,7 +603,11 @@ def validate(val_loader, model, criterion, args):
 
                     if args.autocast:
                         print("LeslieDebug: Enable autocast")
-                        with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, device=torch.device('mkldnn')):
+                        print('bf16 conv_bn_fusion enabled')
+                        model = ipex.fx.conv_bn_fuse(model)
+                        print('enable nhwc')
+                        model = model.to(memory_format=torch.channels_last)
+                        with ipex.amp.autocast(enabled=True, configure=ipex.conf.AmpConf(torch.bfloat16)):
                             for i, (images, target) in enumerate(val_loader):
                                 # for the comparsion with auto-mix
                                 # better performance to rule out the image reorder time in autocast
@@ -611,19 +615,21 @@ def validate(val_loader, model, criterion, args):
                                 # compute output
                                 if i >= args.warmup_iterations:
                                     end = time.time()
+                                images = images.to(memory_format=torch.channels_last)
                                 output = model(images)
                                 #print(output)
                                 if i >= args.warmup_iterations:
                                     batch_time.update(time.time() - end)
                                 loss = criterion(output, target)
-                                output = output.to_dense().to(torch.float)
-                                acc1, acc5 = accuracy(output, target, topk=(1, 5))
-                                losses.update(loss.item(), images.size(0))
-                                top1.update(acc1[0], images.size(0))
-                                top5.update(acc5[0], images.size(0))
+                                with ipex.amp.autocast(enabled=False):
+                                    output = output.to(torch.float)
+                                    acc1, acc5 = accuracy(output, target, topk=(1, 5))
+                                    losses.update(loss.item(), images.size(0))
+                                    top1.update(acc1[0], images.size(0))
+                                    top5.update(acc5[0], images.size(0))
 
-                                if i % args.print_freq == 0:
-                                    progress.display(i)
+                                    if i % args.print_freq == 0:
+                                        progress.display(i)
                     else:
                         print("LeslieDebug: Run without autocast")
                         
