@@ -370,10 +370,10 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
 
         # compute output
         if args.autocast:
-            with torch.cuda.amp.autocast(enabled=True, dtype=torch.bfloat16, layout=torch._mkldnn):
+            with ipex.amp.autocast(enabled=True, configure=ipex.conf.AmpConf(torch.bfloat16)):
                 output = model(images)
                 loss = criterion(output, target)
-            output = output.to_dense().to(torch.float32)
+            output = output.to(torch.float)
         else:
             output = model(images)
             #output = output.to(torch.float32)
@@ -636,15 +636,23 @@ def validate(val_loader, model, criterion, args):
                                 #print(model)
                                 if i >= args.warmup_iterations:
                                     end = time.time()
-                                images = images.to(memory_format=torch.channels_last)
-                                output = model(images)
-                                #print(output)
+                                #images = images.to(memory_format=torch.channels_last)
+                                if i == 30:
+                                    print("Profilling")
+                                    with torch.autograd.profiler.profile(use_cuda=False, record_shapes=True) as prof:
+                                        output = model(images)
+                                    print(prof.key_averages().table(sort_by="self_cpu_time_total"))
+                                    prof.export_chrome_trace("torch_throughput.json")
+                                else:
+                                    output = model(images)
+                                #print(output.is_contiguous(memory_format=torch.channels_last))
                                 if i >= args.warmup_iterations:
                                     batch_time.update(time.time() - end)
                                 #output = output.to_dense().to(torch.float)
+                                output = output.to(torch.float)
                                 loss = criterion(output, target)
                                 with ipex.amp.autocast(enabled=False):
-                                    output = output.to(torch.float)
+                                    #output = output.to(torch.float)
                                     acc1, acc5 = accuracy(output, target, topk=(1, 5))
                                     losses.update(loss.item(), images.size(0))
                                     top1.update(acc1[0], images.size(0))
